@@ -931,6 +931,122 @@ for iri_name, (label, cls) in plant_use_map.items():
     add_named_individual(iri_name, cls, label=label)
 
 # ---------------------------------------------------------------------------
+# Section 9: Shop Layer TBox
+# ---------------------------------------------------------------------------
+
+# --- Group 10: Shop Layer Classes ---
+ShopProduct = add_class(
+    "ShopProduct",
+    label="Shop Product",
+    comment="An item in the shop inventory. Linked to exactly one Plant species via "
+            "isShopProductFor. Source: data/shop/inventory.csv."
+)
+CareLevel = add_class(
+    "CareLevel",
+    label="Care Level",
+    comment="Difficulty of plant care as assessed by the shop: Easy, Medium, or Hard. "
+            "Named individuals: EasyCare, MediumCare, HardCare."
+)
+TemperatureCategory = add_class(
+    "TemperatureCategory",
+    label="Temperature Category",
+    comment="Preferred temperature range for a shop product: Warm, Cool, or Moderate. "
+            "Not present in the Trefle CSV — assigned by the shop per species."
+)
+
+# --- Shop Layer Object Properties ---
+hasShopProduct = add_object_property(
+    "hasShopProduct", domain=Plant, range_=ShopProduct,
+    label="has shop product",
+    comment="Links a plant species to its shop product line(s). "
+            "A species can have multiple shop entries (e.g. different pot sizes)."
+)
+isShopProductFor = add_object_property(
+    "isShopProductFor", domain=ShopProduct, range_=Plant,
+    characteristics=[OWL.FunctionalProperty],
+    label="is shop product for",
+    comment="Links a shop product to its plant species. Functional: one species per product. "
+            "inverseOf hasShopProduct."
+)
+g.add((hasShopProduct, OWL.inverseOf, isShopProductFor))
+
+hasCareLevel = add_object_property(
+    "hasCareLevel", domain=ShopProduct, range_=CareLevel,
+    characteristics=[OWL.FunctionalProperty],
+    label="has care level",
+    comment="Care difficulty of this shop product (Easy/Medium/Hard)."
+)
+hasTemperatureCategory = add_object_property(
+    "hasTemperatureCategory", domain=ShopProduct, range_=TemperatureCategory,
+    characteristics=[OWL.FunctionalProperty],
+    label="has temperature category",
+    comment="Preferred temperature range for this product (Warm/Cool/Moderate)."
+)
+
+# --- Shop Layer Datatype Properties ---
+hasProductId = add_datatype_property(
+    "hasProductId", domain=ShopProduct, range_=XSD.integer,
+    characteristics=[OWL.FunctionalProperty],
+    label="has product ID",
+    comment="Unique shop SKU. owl:hasKey — two ShopProduct individuals with the same "
+            "product ID are the same individual."
+)
+hasProductName = add_datatype_property(
+    "hasProductName", domain=ShopProduct, range_=XSD.string,
+    characteristics=[OWL.FunctionalProperty],
+    label="has product name",
+    comment="Commercial name used in the shop (e.g. 'Monstera', 'Peace Lily')."
+)
+hasStockQuantity = add_datatype_property(
+    "hasStockQuantity", domain=ShopProduct, range_=XSD.integer,
+    label="has stock quantity",
+    comment="Number of units currently on the shelf. Must be ≥ 0."
+)
+hasPriceEur = add_datatype_property(
+    "hasPriceEur", domain=ShopProduct, range_=XSD.decimal,
+    label="has price (EUR)",
+    comment="Retail price in Euros. Must be ≥ 0."
+)
+hasShelfDate = add_datatype_property(
+    "hasShelfDate", domain=ShopProduct, range_=XSD.date,
+    label="has shelf date",
+    comment="Date the product arrived on the shop shelf (xsd:date). "
+            "Used to identify products sitting >3 months."
+)
+
+# --- Shop Layer OWL2 Axioms ---
+# disjointUnionOf: CareLevel is exactly one of Easy/Medium/Hard
+add_disjoint_union(CareLevel,
+    [PLANT["EasyCare"], PLANT["MediumCare"], PLANT["HardCare"]])
+
+# disjointUnionOf: TemperatureCategory is exactly one of Warm/Cool/Moderate
+add_disjoint_union(TemperatureCategory,
+    [PLANT["WarmCategory"], PLANT["CoolCategory"], PLANT["ModerateCategory"]])
+
+# owl:hasKey — hasProductId uniquely identifies a ShopProduct
+shop_key_list = BNode()
+Collection(g, shop_key_list, [hasProductId])
+g.add((ShopProduct, OWL.hasKey, shop_key_list))
+
+# Existential: every ShopProduct must refer to at least one Plant
+add_some_values_from(ShopProduct, isShopProductFor, Plant)
+
+# Range restrictions
+add_integer_range_restriction(hasStockQuantity, min_incl=0)
+add_decimal_min_restriction(hasPriceEur, min_incl=0)
+
+# --- Shop Layer Named Individuals ---
+for iri_name, label in [("EasyCare", "Easy"), ("MediumCare", "Medium"), ("HardCare", "Hard")]:
+    add_named_individual(iri_name, CareLevel, label=label)
+
+for iri_name, label in [
+    ("WarmCategory", "Warm"),
+    ("CoolCategory", "Cool"),
+    ("ModerateCategory", "Moderate"),
+]:
+    add_named_individual(iri_name, TemperatureCategory, label=label)
+
+# ---------------------------------------------------------------------------
 # Section 8: Serialize
 # ---------------------------------------------------------------------------
 

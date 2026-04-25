@@ -1,6 +1,6 @@
 # Plant Management System Ontology
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Ontology IRI:** `http://www.semanticweb.org/plantms/ontology#`
 **Prefix:** `plant:`
 **Serialization:** Turtle (`.ttl`)
@@ -22,7 +22,7 @@ Design goals:
 
 ---
 
-## 2. Class Hierarchy (35 classes)
+## 2. Class Hierarchy (38 classes)
 
 ### Group 1 — Taxonomy (4 classes)
 Motivation: The CSV has `family` and `genus` columns. `TaxonomicRank` is the abstract superclass enabling a property chain axiom.
@@ -122,11 +122,29 @@ Motivation: A plant can fulfill roles (food, vegetable, ornamental). Using role 
 |---|---|---|
 | `EdiblePart` | owl:Thing | `edible_part` (comma-sep): flowers, fruits, leaves, roots, seeds, stem, tubers |
 
+### Group 10 — Shop Layer (3 classes)
+Motivation: The shop owner competency questions (stock levels, prices, shelf age,
+temperature requirements) cannot be answered from Trefle data alone. `ShopProduct`
+represents a product line in the shop inventory and is linked to a `Plant` species
+via `trefle_id`. `CareLevel` and `TemperatureCategory` are controlled vocabularies
+assigned by the shop (temperature is not present in the Trefle CSV).
+
+| Class | Superclass | Source |
+|---|---|---|
+| `ShopProduct` | owl:Thing | `data/shop/inventory.csv` — one row per product line |
+| `CareLevel` | owl:Thing | Named individuals: EasyCare, MediumCare, HardCare |
+| `TemperatureCategory` | owl:Thing | Named individuals: WarmCategory, CoolCategory, ModerateCategory |
+
+**OWL2:** `CareLevel owl:disjointUnionOf (EasyCare MediumCare HardCare)`
+**OWL2:** `TemperatureCategory owl:disjointUnionOf (WarmCategory CoolCategory ModerateCategory)`
+**OWL2:** `ShopProduct owl:hasKey (hasProductId)` — shop SKU uniquely identifies a product line
+**OWL2:** `ShopProduct rdfs:subClassOf ∃ isShopProductFor.Plant` — every product refers to a species
+
 ---
 
 ## 3. Properties
 
-### 3.1 Object Properties (23)
+### 3.1 Object Properties (27)
 
 | Property | Domain | Range | Characteristics | Notes |
 |---|---|---|---|---|
@@ -153,8 +171,12 @@ Motivation: A plant can fulfill roles (food, vegetable, ornamental). Using role 
 | `isSubRegionOf` | Region | Region | Transitive | Region hierarchy |
 | `hasPlantUse` | Plant | PlantUse | — | AgentRole ODP |
 | `hasEdiblePart` | Plant | EdiblePart | — | CSV `edible_part` |
+| `hasShopProduct` | Plant | ShopProduct | — | Links a species to its shop product line(s) |
+| `isShopProductFor` | ShopProduct | Plant | Functional | inverseOf `hasShopProduct`; one species per product |
+| `hasCareLevel` | ShopProduct | CareLevel | Functional | Easy/Medium/Hard — assigned by shop |
+| `hasTemperatureCategory` | ShopProduct | TemperatureCategory | Functional | Warm/Cool/Moderate — not in Trefle CSV |
 
-### 3.2 Datatype Properties (27)
+### 3.2 Datatype Properties (32)
 
 | Property | Domain | Range | Constraint | CSV column |
 |---|---|---|---|---|
@@ -185,6 +207,11 @@ Motivation: A plant can fulfill roles (food, vegetable, ornamental). Using role 
 | `isVegetable` | Plant | xsd:boolean | — | `vegetable` |
 | `hasFlowerConspicuous` | Flower | xsd:boolean | — | `flower_conspicuous` |
 | `hasFruitConspicuous` | Fruit | xsd:boolean | — | `fruit_conspicuous` |
+| `hasProductId` | ShopProduct | xsd:integer | Functional | shop SKU; `inventory.csv` `product_id` |
+| `hasProductName` | ShopProduct | xsd:string | Functional | commercial name, e.g. "Monstera" |
+| `hasStockQuantity` | ShopProduct | xsd:integer | ≥ 0 | units on shelf; `inventory.csv` `stock_quantity` |
+| `hasPriceEur` | ShopProduct | xsd:decimal | ≥ 0 | price in euros; `inventory.csv` `price_eur` |
+| `hasShelfDate` | ShopProduct | xsd:date | — | date product arrived in shop; `inventory.csv` `shelf_date` |
 
 ---
 
@@ -388,6 +415,10 @@ These map to SPARQL queries over the full ABox (Step 2).
 | CQ8 | What is the maximum height of all Pinaceae plants? | `belongsToFamily plant:Pinaceae ; hasMaximumHeightCm ?h` → `MAX(?h)` |
 | CQ9 | Which genera are in the Pinaceae family? | `isSubsumedByFamily plant:Pinaceae` |
 | CQ10 | Which plants have coarse foliage? | `hasComponent [a Foliage; hasFoliageTexture plant:CoarseTexture]` |
+| CQ11 | Which products require High Humidity + Warm Temp and have been on the shelf >3 months? | `hasShopProduct [hasTemperatureCategory plant:WarmCategory; hasShelfDate ?d] . FILTER(?d < "2026-01-25"^^xsd:date)` + JOIN Trefle `hasAtmosphericHumidity ?h . FILTER(?h >= 7)` |
+| CQ12 | What is the total stock of all Araceae plants? | `belongsToFamily plant:Araceae ; hasShopProduct [hasStockQuantity ?q]` → `SUM(?q)` |
+| CQ13 | Do we have more than 5 Orchids in stock? | `belongsToFamily plant:Orchidaceae ; hasShopProduct [hasStockQuantity ?q]` → `SUM(?q) > 5` |
+| CQ14 | What easy-care climbing plants cost under €30? | `hasGrowthHabit plant:Vine ; hasShopProduct [hasCareLevel plant:EasyCare; hasPriceEur ?p] . FILTER(?p < 30)` |
 
 ---
 
@@ -429,7 +460,13 @@ These map to SPARQL queries over the full ABox (Step 2).
 ### PlantUse (9)
 `EdibleLeavesUse`, `EdibleRootsUse`, `EdibleFruitsUse`, `EdibleStemsUse`, `EdibleSeedsUse`, `EdibleTubersUse`, `EdibleFlowersUse`, `VegetableUseIndividual`, `OrnamentalUseIndividual`
 
-**Total: 80 named individuals**
+### CareLevel (3)
+`EasyCare`, `MediumCare`, `HardCare`
+
+### TemperatureCategory (3)
+`WarmCategory`, `CoolCategory`, `ModerateCategory`
+
+**Total: 86 named individuals**
 
 ---
 
@@ -483,6 +520,19 @@ These map to SPARQL queries over the full ABox (Step 2).
 | `url_usda` / `url_gbif` / others | (omitted) | — | reference only |
 | `rank` | (not mapped) | — | always "species" in CSV |
 
+### Shop Inventory Column Mapping (`data/shop/inventory.csv`)
+
+| CSV Column | Ontology Concept | Kind | Notes |
+|---|---|---|---|
+| `product_id` | `hasProductId` | DatatypeProperty | Functional; `owl:hasKey` |
+| `trefle_id` | join key → `isShopProductFor` → Plant | ObjectProperty | FK to `species.csv` `id` |
+| `product_name` | `hasProductName` | DatatypeProperty | Commercial name |
+| `stock_quantity` | `hasStockQuantity` | DatatypeProperty | integer ≥ 0 |
+| `price_eur` | `hasPriceEur` | DatatypeProperty | decimal ≥ 0 |
+| `shelf_date` | `hasShelfDate` | DatatypeProperty | xsd:date |
+| `care_level` | `hasCareLevel` → CareLevel IRI | ObjectProperty | Easy/Medium/Hard |
+| `temperature_category` | `hasTemperatureCategory` → TemperatureCategory IRI | ObjectProperty | Warm/Cool/Moderate |
+
 ---
 
 ## 9. How to Load in Protégé
@@ -493,10 +543,10 @@ These map to SPARQL queries over the full ABox (Step 2).
 4. Run reasoner: Reasoner menu → HermiT (or Pellet) → Start reasoner
 5. Expected result: **0 inconsistencies** (green indicator)
 6. Check metrics: Window → Views → Ontology views → Ontology Metrics
-   - Classes: 35 ✓
-   - Object properties: 23 ✓
-   - Data properties: 27 ✓
-   - Named individuals: 80 ✓
+   - Classes: 38 ✓
+   - Object properties: 27 ✓
+   - Data properties: 32 ✓
+   - Named individuals: 86 ✓
 
 **DL Query examples (after classification):**
 ```
@@ -519,4 +569,4 @@ Plant and (hasGrowthHabit value Tree)
 
 5. **Color IRI disambiguation** — Colors like "Green" appear in both FlowerColor and FoliageColor. Named individuals use prefixed IRIs (`FlowerColor_Green`, `FoliageColor_Green`) to avoid type conflicts.
 
-6. **No shop/retail layer** — This ontology covers the biological and ecological domain only. A retail or commerce layer would require a separate module linked via `owl:imports`.
+6. **Temperature not in Trefle CSV** — `TemperatureCategory` (Warm/Cool/Moderate) is assigned manually per species in `data/shop/inventory.csv`. It cannot be derived automatically from Trefle data.
