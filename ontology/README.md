@@ -30,7 +30,7 @@ Motivation: The CSV has `family` and `genus` columns. `TaxonomicRank` is the abs
 | Class | Superclass | CSV column |
 |---|---|---|
 | `TaxonomicRank` | owl:Thing | — (abstract) |
-| `Family` | TaxonomicRank | `family` |
+| `Family` | TaxonomicRank | `family`, `family_common_name` |
 | `Genus` | TaxonomicRank | `genus` |
 | `Plant` | owl:Thing | one row = one individual |
 
@@ -176,13 +176,14 @@ assigned by the shop (temperature is not present in the Trefle CSV).
 | `hasCareLevel` | ShopProduct | CareLevel | Functional | Easy/Medium/Hard — assigned by shop |
 | `hasTemperatureCategory` | ShopProduct | TemperatureCategory | Functional | Warm/Cool/Moderate — not in Trefle CSV |
 
-### 3.2 Datatype Properties (32)
+### 3.2 Datatype Properties (33)
 
 | Property | Domain | Range | Constraint | CSV column |
 |---|---|---|---|---|
 | `hasTrefleId` | Plant | xsd:integer | Functional | `id` |
 | `hasScientificName` | Plant | xsd:string | Functional | `scientific_name` |
 | `hasCommonName` | Plant | xsd:string | — | `common_name`, `common_names` |
+| `hasFamilyCommonName` | Family | xsd:string | — | `family_common_name` |
 | `hasSynonymName` | Plant | xsd:string | — | `synonyms` |
 | `hasYear` | Plant | xsd:integer | — | `year` |
 | `hasAuthor` | Plant | xsd:string | — | `author` |
@@ -478,6 +479,7 @@ These map to SPARQL queries over the full ABox (Step 2).
 | `scientific_name` | `hasScientificName` | DatatypeProperty | Functional |
 | `genus` | `belongsToGenus` → Genus IRI | ObjectProperty | Functional |
 | `family` | `belongsToFamily` → Family IRI | ObjectProperty | also inferred via chain |
+| `family_common_name` | `hasFamilyCommonName` | DatatypeProperty | attached to Family |
 | `year` | `hasYear` | DatatypeProperty | — |
 | `author` | `hasAuthor` | DatatypeProperty | — |
 | `common_name` / `common_names` | `hasCommonName` | DatatypeProperty | multi-value |
@@ -545,7 +547,7 @@ These map to SPARQL queries over the full ABox (Step 2).
 6. Check metrics: Window → Views → Ontology views → Ontology Metrics
    - Classes: 38 ✓
    - Object properties: 27 ✓
-   - Data properties: 32 ✓
+   - Data properties: 33 ✓
    - Named individuals: 86 ✓
 
 **DL Query examples (after classification):**

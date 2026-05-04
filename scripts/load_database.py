@@ -1,313 +1,973 @@
 """
-Load both data sources into SQLite for Step 2 OBDA.
+Load both data sources into a normalized SQLite schema for Step 2 OBDA.
 
 Creates : data/plantms.db
-Tables  : species        — all 416k rows from data/raw/species.csv
-          shop_inventory — all rows from data/shop/inventory.csv
+Tables  : plant core data, taxonomy dimensions, lookup dimensions,
+          multi-value link tables, and shop inventory tables
 
-Run with: python3 scripts/load_database.py
-Requires: only Python stdlib (csv, sqlite3, pathlib)
-
-Columns omitted from species (not mapped in ontology):
-  planting_description, planting_sowing_description,
-  url_usda, url_tropicos, url_tela_botanica, url_powo,
-  url_plantnet, url_gbif, url_openfarm, url_catminat
+Run with: .venv\\Scripts\\python.exe scripts\\load_database.py
+Requires: only Python stdlib (csv, sqlite3, pathlib, time, re)
 """
 
 import csv
+import re
 import sqlite3
 import time
 from pathlib import Path
 
-SPECIES_CSV   = Path(__file__).parent.parent / "data" / "raw" / "species.csv"
-SHOP_CSV      = Path(__file__).parent.parent / "data" / "shop" / "inventory.csv"
-DB_PATH       = Path(__file__).parent.parent / "data" / "plantms.db"
-BATCH_SIZE    = 5_000   # rows per executemany call
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SPECIES_CSV = ROOT_DIR / "data" / "raw" / "species.csv"
+SHOP_CSV = ROOT_DIR / "data" / "shop" / "inventory.csv"
+DB_PATH = ROOT_DIR / "data" / "plantms.db"
+BATCH_SIZE = 5000
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
-def to_int(v):
-    """Convert CSV value to int, returning None for empty/None strings."""
-    v = v.strip()
-    if not v or v == "None":
+def to_text(value):
+    if value is None:
+        return None
+    text = value.strip()
+    if not text or text == "None":
+        return None
+    return text
+
+
+def to_int(value):
+    text = to_text(value)
+    if text is None:
         return None
     try:
-        return int(float(v))
+        return int(float(text))
     except ValueError:
         return None
 
-def to_real(v):
-    """Convert CSV value to float, returning None for empty/None strings."""
-    v = v.strip()
-    if not v or v == "None":
+
+def to_real(value):
+    text = to_text(value)
+    if text is None:
         return None
     try:
-        return float(v)
+        return float(text)
     except ValueError:
         return None
 
-def to_bool(v):
-    """Convert 'true'/'false' CSV string to 1/0 integer, None if missing."""
-    v = v.strip().lower()
-    if v == "true":
+
+def to_bool(value):
+    text = to_text(value)
+    if text is None:
+        return None
+    text = text.lower()
+    if text == "true":
         return 1
-    if v == "false":
+    if text == "false":
         return 0
     return None
 
-def to_text(v):
-    """Return stripped string or None if empty."""
-    v = v.strip()
-    return v if v else None
 
-# ---------------------------------------------------------------------------
-# Schema
-# ---------------------------------------------------------------------------
+def split_csv_values(value):
+    text = to_text(value)
+    if text is None:
+        return []
+    return [part.strip() for part in text.split(",") if part.strip()]
 
-DDL_SPECIES = """
-CREATE TABLE IF NOT EXISTS species (
-    id                      INTEGER PRIMARY KEY,
-    scientific_name         TEXT,
-    rank                    TEXT,
-    genus                   TEXT,
-    family                  TEXT,
-    year                    INTEGER,
-    author                  TEXT,
-    bibliography            TEXT,
-    common_name             TEXT,
-    family_common_name      TEXT,
-    image_url               TEXT,
-    flower_color            TEXT,
-    flower_conspicuous      INTEGER,    -- 1/0/NULL
-    foliage_color           TEXT,
-    foliage_texture         TEXT,
-    fruit_color             TEXT,
-    fruit_conspicuous       INTEGER,    -- 1/0/NULL
-    fruit_months            TEXT,       -- space-separated month numbers
-    bloom_months            TEXT,       -- space-separated month numbers
-    ground_humidity         INTEGER,
-    growth_form             TEXT,
-    growth_habit            TEXT,       -- comma-separated (e.g. "Tree,Shrub")
-    growth_months           TEXT,       -- space-separated month numbers
-    growth_rate             TEXT,
-    edible_part             TEXT,       -- comma-separated
-    vegetable               INTEGER,    -- 1/0/NULL
-    edible                  INTEGER,    -- 1/0/NULL
-    light                   INTEGER,
-    soil_nutriments         INTEGER,
-    soil_salinity           INTEGER,
-    anaerobic_tolerance     INTEGER,
-    atmospheric_humidity    INTEGER,
-    average_height_cm       REAL,
-    maximum_height_cm       REAL,
-    minimum_root_depth_cm   REAL,
-    ph_maximum              REAL,
-    ph_minimum              REAL,
-    planting_days_to_harvest INTEGER,
-    planting_row_spacing_cm REAL,
-    planting_spread_cm      REAL,
-    synonyms                TEXT,
-    distributions           TEXT,       -- comma-separated region names
-    common_names            TEXT,
-    url_wikipedia_en        TEXT
-);
-"""
 
-DDL_SHOP = """
-CREATE TABLE IF NOT EXISTS shop_inventory (
-    product_id          INTEGER PRIMARY KEY,
-    trefle_id           INTEGER REFERENCES species(id),
-    scientific_name     TEXT,
-    product_name        TEXT,
-    stock_quantity      INTEGER,
-    price_eur           REAL,
-    shelf_date          TEXT,           -- ISO date string: YYYY-MM-DD
-    care_level          TEXT,           -- Easy / Medium / Hard
-    temperature_category TEXT           -- Warm / Cool / Moderate
-);
-"""
+def split_month_values(value):
+    text = to_text(value)
+    if text is None:
+        return []
 
-DDL_INDEXES = [
-    "CREATE INDEX IF NOT EXISTS idx_species_genus  ON species(genus);",
-    "CREATE INDEX IF NOT EXISTS idx_species_family ON species(family);",
-    "CREATE INDEX IF NOT EXISTS idx_shop_trefle_id ON shop_inventory(trefle_id);",
+    months = []
+    for part in text.split():
+        month_number = to_int(part)
+        if month_number is None:
+            continue
+        if month_number < 1 or month_number > 12:
+            continue
+        months.append(month_number)
+    return months
+
+
+def unique_values(values):
+    return list(dict.fromkeys(values))
+
+
+def normalize_key(value):
+    if value is None:
+        return ""
+    lowered = value.strip().lower()
+    return re.sub(r"[^a-z0-9/]+", " ", lowered).strip()
+
+
+def ontology_token(value):
+    parts = re.findall(r"[A-Za-z0-9]+", value)
+    return "".join(part[:1].upper() + part[1:].lower() for part in parts)
+
+
+GROWTH_RATE_DIM = [
+    ("slow", "Slow", "SlowGrowthRate"),
+    ("moderate", "Moderate", "ModerateGrowthRate"),
+    ("rapid", "Rapid", "RapidGrowthRate"),
 ]
 
-# ---------------------------------------------------------------------------
-# Column mapping for species CSV
-# Positions confirmed from header (0-based):
-#   0:id 1:scientific_name 2:rank 3:genus 4:family 5:year 6:author
-#   7:bibliography 8:common_name 9:family_common_name 10:image_url
-#   11:flower_color 12:flower_conspicuous 13:foliage_color 14:foliage_texture
-#   15:fruit_color 16:fruit_conspicuous 17:fruit_months 18:bloom_months
-#   19:ground_humidity 20:growth_form 21:growth_habit 22:growth_months
-#   23:growth_rate 24:edible_part 25:vegetable 26:edible 27:light
-#   28:soil_nutriments 29:soil_salinity 30:anaerobic_tolerance
-#   31:atmospheric_humidity 32:average_height_cm 33:maximum_height_cm
-#   34:minimum_root_depth_cm 35:ph_maximum 36:ph_minimum
-#   37:planting_days_to_harvest 38:planting_description (SKIP)
-#   39:planting_sowing_description (SKIP) 40:planting_row_spacing_cm
-#   41:planting_spread_cm 42:synonyms 43:distributions 44:common_names
-#   45:url_usda (SKIP) 46:url_tropicos (SKIP) 47:url_tela_botanica (SKIP)
-#   48:url_powo (SKIP) 49:url_plantnet (SKIP) 50:url_gbif (SKIP)
-#   51:url_openfarm (SKIP) 52:url_catminat (SKIP) 53:url_wikipedia_en
-# ---------------------------------------------------------------------------
+GROWTH_FORM_DIM = [
+    ("bunch", "Bunch", "Bunch"),
+    ("colonizing", "Colonizing", "Colonizing"),
+    ("erect", "Erect", "Erect"),
+    ("multiple_stem", "Multiple Stem", "MultipleStem"),
+    ("rhizomatous", "Rhizomatous", "Rhizomatous"),
+    ("single_crown", "Single Crown", "SingleCrown"),
+    ("single_stem", "Single Stem", "SingleStem"),
+    ("stoloniferous", "Stoloniferous", "Stoloniferous"),
+    ("thicket_forming", "Thicket Forming", "ThicketForming"),
+]
 
-def parse_species_row(r):
-    """Convert a raw TSV row list into the tuple for INSERT."""
-    if len(r) < 54:
-        r = r + [""] * (54 - len(r))  # pad short rows
-    return (
-        to_int(r[0]),    # id
-        to_text(r[1]),   # scientific_name
-        to_text(r[2]),   # rank
-        to_text(r[3]),   # genus
-        to_text(r[4]),   # family
-        to_int(r[5]),    # year
-        to_text(r[6]),   # author
-        to_text(r[7]),   # bibliography
-        to_text(r[8]),   # common_name
-        to_text(r[9]),   # family_common_name
-        to_text(r[10]),  # image_url
-        to_text(r[11]),  # flower_color
-        to_bool(r[12]),  # flower_conspicuous
-        to_text(r[13]),  # foliage_color
-        to_text(r[14]),  # foliage_texture
-        to_text(r[15]),  # fruit_color
-        to_bool(r[16]),  # fruit_conspicuous
-        to_text(r[17]),  # fruit_months
-        to_text(r[18]),  # bloom_months
-        to_int(r[19]),   # ground_humidity
-        to_text(r[20]),  # growth_form
-        to_text(r[21]),  # growth_habit
-        to_text(r[22]),  # growth_months
-        to_text(r[23]),  # growth_rate
-        to_text(r[24]),  # edible_part
-        to_bool(r[25]),  # vegetable
-        to_bool(r[26]),  # edible
-        to_int(r[27]),   # light
-        to_int(r[28]),   # soil_nutriments
-        to_int(r[29]),   # soil_salinity
-        to_int(r[30]),   # anaerobic_tolerance
-        to_int(r[31]),   # atmospheric_humidity
-        to_real(r[32]),  # average_height_cm
-        to_real(r[33]),  # maximum_height_cm
-        to_real(r[34]),  # minimum_root_depth_cm
-        to_real(r[35]),  # ph_maximum
-        to_real(r[36]),  # ph_minimum
-        to_int(r[37]),   # planting_days_to_harvest
-        to_real(r[40]),  # planting_row_spacing_cm  (38,39 skipped)
-        to_real(r[41]),  # planting_spread_cm
-        to_text(r[42]),  # synonyms
-        to_text(r[43]),  # distributions
-        to_text(r[44]),  # common_names
-        to_text(r[53]),  # url_wikipedia_en          (45-52 skipped)
+GROWTH_HABIT_DIM = [
+    ("tree", "Tree", "Tree"),
+    ("shrub", "Shrub", "Shrub"),
+    ("vine", "Vine", "Vine"),
+    ("subshrub", "Subshrub", "Subshrub"),
+    ("forb_herb", "Forb/Herb", "ForbHerb"),
+    ("graminoid", "Graminoid", "Graminoid"),
+    ("nonvascular", "Nonvascular", "Nonvascular"),
+]
+
+FOLIAGE_TEXTURE_DIM = [
+    ("fine", "Fine", "FineTexture"),
+    ("medium", "Medium", "MediumTexture"),
+    ("coarse", "Coarse", "CoarseTexture"),
+]
+
+EDIBLE_PART_DIM = [
+    ("flower", "Flower", "FlowerPart", "EdibleFlowersUse"),
+    ("fruit", "Fruit", "FruitPart", "EdibleFruitsUse"),
+    ("leaf", "Leaf", "LeafPart", "EdibleLeavesUse"),
+    ("root", "Root", "RootPart", "EdibleRootsUse"),
+    ("seed", "Seed", "SeedPart", "EdibleSeedsUse"),
+    ("stem", "Stem", "StemPart", "EdibleStemsUse"),
+    ("tuber", "Tuber", "TuberPart", "EdibleTubersUse"),
+]
+
+CARE_LEVEL_DIM = [
+    ("easy", "Easy", "EasyCare"),
+    ("medium", "Medium", "MediumCare"),
+    ("hard", "Hard", "HardCare"),
+]
+
+TEMPERATURE_CATEGORY_DIM = [
+    ("warm", "Warm", "WarmCategory"),
+    ("cool", "Cool", "CoolCategory"),
+    ("moderate", "Moderate", "ModerateCategory"),
+]
+
+MONTH_DIM = [
+    (1, "January", "January"),
+    (2, "February", "February"),
+    (3, "March", "March"),
+    (4, "April", "April"),
+    (5, "May", "May"),
+    (6, "June", "June"),
+    (7, "July", "July"),
+    (8, "August", "August"),
+    (9, "September", "September"),
+    (10, "October", "October"),
+    (11, "November", "November"),
+    (12, "December", "December"),
+]
+
+
+def build_dim_label_map(rows):
+    return {normalize_key(label): code for code, label, _ in rows}
+
+
+def build_lower_label_map(rows):
+    return {label.lower(): code for code, label, _ in rows}
+
+
+GROWTH_RATE_MAP = build_dim_label_map(GROWTH_RATE_DIM)
+GROWTH_FORM_MAP = build_dim_label_map(GROWTH_FORM_DIM)
+FOLIAGE_TEXTURE_MAP = build_dim_label_map(FOLIAGE_TEXTURE_DIM)
+CARE_LEVEL_MAP = build_lower_label_map(CARE_LEVEL_DIM)
+TEMPERATURE_CATEGORY_MAP = build_lower_label_map(TEMPERATURE_CATEGORY_DIM)
+
+GROWTH_HABIT_MAP = {
+    "tree": "tree",
+    "shrub": "shrub",
+    "vine": "vine",
+    "subshrub": "subshrub",
+    "forb/herb": "forb_herb",
+    "forb herb": "forb_herb",
+    "graminoid": "graminoid",
+    "nonvascular": "nonvascular",
+}
+
+EDIBLE_PART_MAP = {
+    "flower": "flower",
+    "flowers": "flower",
+    "fruit": "fruit",
+    "fruits": "fruit",
+    "leaf": "leaf",
+    "leaves": "leaf",
+    "root": "root",
+    "roots": "root",
+    "seed": "seed",
+    "seeds": "seed",
+    "stem": "stem",
+    "stems": "stem",
+    "tuber": "tuber",
+    "tubers": "tuber",
+}
+
+
+DDL = [
+    """
+    CREATE TABLE family (
+        family_id INTEGER PRIMARY KEY,
+        family_name TEXT NOT NULL UNIQUE,
+        family_common_name TEXT
+    );
+    """,
+    """
+    CREATE TABLE genus (
+        genus_id INTEGER PRIMARY KEY,
+        genus_name TEXT NOT NULL,
+        family_id INTEGER NOT NULL REFERENCES family(family_id),
+        UNIQUE(genus_name, family_id)
+    );
+    """,
+    """
+    CREATE TABLE growth_rate_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE growth_form_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE growth_habit_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE foliage_texture_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE edible_part_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        part_ontology_suffix TEXT NOT NULL UNIQUE,
+        use_ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE care_level_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE temperature_category_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE month_dim (
+        month_number INTEGER PRIMARY KEY,
+        label TEXT NOT NULL UNIQUE,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE flower_color_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL UNIQUE,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE fruit_color_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL UNIQUE,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE foliage_color_dim (
+        code TEXT PRIMARY KEY,
+        label TEXT NOT NULL UNIQUE,
+        ontology_suffix TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE region (
+        region_id INTEGER PRIMARY KEY,
+        region_name TEXT NOT NULL UNIQUE
+    );
+    """,
+    """
+    CREATE TABLE plant (
+        plant_id INTEGER PRIMARY KEY,
+        scientific_name TEXT,
+        rank TEXT,
+        genus_id INTEGER REFERENCES genus(genus_id),
+        family_id INTEGER REFERENCES family(family_id),
+        year INTEGER,
+        author TEXT,
+        bibliography TEXT,
+        primary_common_name TEXT,
+        image_url TEXT,
+        ground_humidity INTEGER,
+        growth_form_code TEXT REFERENCES growth_form_dim(code),
+        growth_rate_code TEXT REFERENCES growth_rate_dim(code),
+        vegetable INTEGER,
+        edible INTEGER,
+        light INTEGER,
+        soil_nutriments INTEGER,
+        soil_salinity INTEGER,
+        anaerobic_tolerance INTEGER,
+        atmospheric_humidity INTEGER,
+        average_height_cm REAL,
+        maximum_height_cm REAL,
+        minimum_root_depth_cm REAL,
+        ph_maximum REAL,
+        ph_minimum REAL,
+        planting_days_to_harvest INTEGER,
+        planting_row_spacing_cm REAL,
+        planting_spread_cm REAL,
+        url_wikipedia_en TEXT
+    );
+    """,
+    """
+    CREATE TABLE plant_common_name (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        common_name TEXT NOT NULL,
+        is_primary INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (plant_id, common_name)
+    );
+    """,
+    """
+    CREATE TABLE plant_synonym (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        synonym_name TEXT NOT NULL,
+        PRIMARY KEY (plant_id, synonym_name)
+    );
+    """,
+    """
+    CREATE TABLE plant_growth_habit (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        growth_habit_code TEXT NOT NULL REFERENCES growth_habit_dim(code),
+        PRIMARY KEY (plant_id, growth_habit_code)
+    );
+    """,
+    """
+    CREATE TABLE plant_bloom_month (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        month_number INTEGER NOT NULL REFERENCES month_dim(month_number),
+        PRIMARY KEY (plant_id, month_number)
+    );
+    """,
+    """
+    CREATE TABLE plant_fruit_month (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        month_number INTEGER NOT NULL REFERENCES month_dim(month_number),
+        PRIMARY KEY (plant_id, month_number)
+    );
+    """,
+    """
+    CREATE TABLE plant_growth_month (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        month_number INTEGER NOT NULL REFERENCES month_dim(month_number),
+        PRIMARY KEY (plant_id, month_number)
+    );
+    """,
+    """
+    CREATE TABLE plant_edible_part (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        edible_part_code TEXT NOT NULL REFERENCES edible_part_dim(code),
+        PRIMARY KEY (plant_id, edible_part_code)
+    );
+    """,
+    """
+    CREATE TABLE flower_component (
+        plant_id INTEGER PRIMARY KEY REFERENCES plant(plant_id),
+        conspicuous INTEGER
+    );
+    """,
+    """
+    CREATE TABLE plant_flower_color (
+        plant_id INTEGER NOT NULL REFERENCES flower_component(plant_id),
+        color_code TEXT NOT NULL REFERENCES flower_color_dim(code),
+        PRIMARY KEY (plant_id, color_code)
+    );
+    """,
+    """
+    CREATE TABLE fruit_component (
+        plant_id INTEGER PRIMARY KEY REFERENCES plant(plant_id),
+        conspicuous INTEGER
+    );
+    """,
+    """
+    CREATE TABLE plant_fruit_color (
+        plant_id INTEGER NOT NULL REFERENCES fruit_component(plant_id),
+        color_code TEXT NOT NULL REFERENCES fruit_color_dim(code),
+        PRIMARY KEY (plant_id, color_code)
+    );
+    """,
+    """
+    CREATE TABLE foliage_component (
+        plant_id INTEGER PRIMARY KEY REFERENCES plant(plant_id),
+        texture_code TEXT REFERENCES foliage_texture_dim(code)
+    );
+    """,
+    """
+    CREATE TABLE plant_foliage_color (
+        plant_id INTEGER NOT NULL REFERENCES foliage_component(plant_id),
+        color_code TEXT NOT NULL REFERENCES foliage_color_dim(code),
+        PRIMARY KEY (plant_id, color_code)
+    );
+    """,
+    """
+    CREATE TABLE plant_distribution (
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        region_id INTEGER NOT NULL REFERENCES region(region_id),
+        PRIMARY KEY (plant_id, region_id)
+    );
+    """,
+    """
+    CREATE TABLE shop_product (
+        product_id INTEGER PRIMARY KEY,
+        plant_id INTEGER NOT NULL REFERENCES plant(plant_id),
+        product_name TEXT NOT NULL,
+        stock_quantity INTEGER NOT NULL,
+        price_eur REAL NOT NULL,
+        shelf_date TEXT NOT NULL,
+        care_level_code TEXT REFERENCES care_level_dim(code),
+        temperature_category_code TEXT REFERENCES temperature_category_dim(code)
+    );
+    """,
+]
+
+
+INDEXES = [
+    "CREATE INDEX idx_family_name ON family(family_name);",
+    "CREATE INDEX idx_genus_name ON genus(genus_name);",
+    "CREATE INDEX idx_plant_genus_id ON plant(genus_id);",
+    "CREATE INDEX idx_plant_family_id ON plant(family_id);",
+    "CREATE INDEX idx_plant_growth_rate_code ON plant(growth_rate_code);",
+    "CREATE INDEX idx_plant_growth_form_code ON plant(growth_form_code);",
+    "CREATE INDEX idx_plant_common_name_name ON plant_common_name(common_name);",
+    "CREATE INDEX idx_plant_synonym_name ON plant_synonym(synonym_name);",
+    "CREATE INDEX idx_plant_distribution_region ON plant_distribution(region_id);",
+    "CREATE INDEX idx_shop_product_plant_id ON shop_product(plant_id);",
+]
+
+
+INSERT_SQL = {
+    "plant": """
+        INSERT INTO plant VALUES (
+            ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+        );
+    """,
+    "plant_common_name": """
+        INSERT OR IGNORE INTO plant_common_name VALUES (?,?,?);
+    """,
+    "plant_synonym": """
+        INSERT OR IGNORE INTO plant_synonym VALUES (?,?);
+    """,
+    "plant_growth_habit": """
+        INSERT OR IGNORE INTO plant_growth_habit VALUES (?,?);
+    """,
+    "plant_bloom_month": """
+        INSERT OR IGNORE INTO plant_bloom_month VALUES (?,?);
+    """,
+    "plant_fruit_month": """
+        INSERT OR IGNORE INTO plant_fruit_month VALUES (?,?);
+    """,
+    "plant_growth_month": """
+        INSERT OR IGNORE INTO plant_growth_month VALUES (?,?);
+    """,
+    "plant_edible_part": """
+        INSERT OR IGNORE INTO plant_edible_part VALUES (?,?);
+    """,
+    "flower_component": """
+        INSERT OR REPLACE INTO flower_component VALUES (?,?);
+    """,
+    "plant_flower_color": """
+        INSERT OR IGNORE INTO plant_flower_color VALUES (?,?);
+    """,
+    "fruit_component": """
+        INSERT OR REPLACE INTO fruit_component VALUES (?,?);
+    """,
+    "plant_fruit_color": """
+        INSERT OR IGNORE INTO plant_fruit_color VALUES (?,?);
+    """,
+    "foliage_component": """
+        INSERT OR REPLACE INTO foliage_component VALUES (?,?);
+    """,
+    "plant_foliage_color": """
+        INSERT OR IGNORE INTO plant_foliage_color VALUES (?,?);
+    """,
+    "plant_distribution": """
+        INSERT OR IGNORE INTO plant_distribution VALUES (?,?);
+    """,
+    "shop_product": """
+        INSERT OR REPLACE INTO shop_product VALUES (?,?,?,?,?,?,?,?);
+    """,
+}
+
+
+def seed_dimensions(cursor):
+    cursor.executemany("INSERT INTO growth_rate_dim VALUES (?,?,?)", GROWTH_RATE_DIM)
+    cursor.executemany("INSERT INTO growth_form_dim VALUES (?,?,?)", GROWTH_FORM_DIM)
+    cursor.executemany("INSERT INTO growth_habit_dim VALUES (?,?,?)", GROWTH_HABIT_DIM)
+    cursor.executemany("INSERT INTO foliage_texture_dim VALUES (?,?,?)", FOLIAGE_TEXTURE_DIM)
+    cursor.executemany("INSERT INTO edible_part_dim VALUES (?,?,?,?)", EDIBLE_PART_DIM)
+    cursor.executemany("INSERT INTO care_level_dim VALUES (?,?,?)", CARE_LEVEL_DIM)
+    cursor.executemany("INSERT INTO temperature_category_dim VALUES (?,?,?)", TEMPERATURE_CATEGORY_DIM)
+    cursor.executemany("INSERT INTO month_dim VALUES (?,?,?)", MONTH_DIM)
+
+
+def create_loader_state(cursor):
+    return {
+        "cursor": cursor,
+        "family_cache": {},
+        "genus_cache": {},
+        "region_cache": {},
+        "flower_color_cache": {},
+        "fruit_color_cache": {},
+        "foliage_color_cache": {},
+    }
+
+
+def get_or_create_family(state, family_name, family_common_name):
+    cache = state["family_cache"]
+    cursor = state["cursor"]
+
+    if family_name in cache:
+        family_id = cache[family_name]
+        if family_common_name:
+            cursor.execute(
+                """
+                UPDATE family
+                SET family_common_name = COALESCE(family_common_name, ?)
+                WHERE family_id = ?
+                """,
+                (family_common_name, family_id),
+            )
+        return family_id
+
+    cursor.execute(
+        """
+        INSERT INTO family (family_name, family_common_name)
+        VALUES (?, ?)
+        ON CONFLICT(family_name) DO UPDATE
+        SET family_common_name = COALESCE(family.family_common_name, excluded.family_common_name)
+        """,
+        (family_name, family_common_name),
     )
 
-INSERT_SPECIES = """
-INSERT OR IGNORE INTO species VALUES (
-    ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-);
-"""
+    row = cursor.execute(
+        "SELECT family_id FROM family WHERE family_name = ?",
+        (family_name,),
+    ).fetchone()
+    family_id = row[0]
+    cache[family_name] = family_id
+    return family_id
 
-INSERT_SHOP = """
-INSERT OR REPLACE INTO shop_inventory VALUES (?,?,?,?,?,?,?,?,?);
-"""
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+def get_or_create_genus(state, genus_name, family_id):
+    cache = state["genus_cache"]
+    cursor = state["cursor"]
+    cache_key = (genus_name, family_id)
 
+    if cache_key in cache:
+        return cache[cache_key]
+
+    cursor.execute(
+        """
+        INSERT OR IGNORE INTO genus (genus_name, family_id)
+        VALUES (?, ?)
+        """,
+        (genus_name, family_id),
+    )
+
+    row = cursor.execute(
+        """
+        SELECT genus_id
+        FROM genus
+        WHERE genus_name = ? AND family_id = ?
+        """,
+        (genus_name, family_id),
+    ).fetchone()
+    genus_id = row[0]
+    cache[cache_key] = genus_id
+    return genus_id
+
+
+def get_or_create_region(state, region_name):
+    cache = state["region_cache"]
+    cursor = state["cursor"]
+
+    if region_name in cache:
+        return cache[region_name]
+
+    cursor.execute(
+        "INSERT OR IGNORE INTO region (region_name) VALUES (?)",
+        (region_name,),
+    )
+
+    row = cursor.execute(
+        "SELECT region_id FROM region WHERE region_name = ?",
+        (region_name,),
+    ).fetchone()
+    region_id = row[0]
+    cache[region_name] = region_id
+    return region_id
+
+
+def get_or_create_color(state, table_name, cache_name, label, prefix):
+    cursor = state["cursor"]
+    cache = state[cache_name]
+    clean_label = label.strip()
+
+    if clean_label in cache:
+        return cache[clean_label]
+
+    code = re.sub(r"[^a-z0-9]+", "_", clean_label.lower()).strip("_")
+    if not code:
+        code = "unknown_" + str(len(cache) + 1)
+
+    ontology_suffix = prefix + ontology_token(clean_label)
+
+    cursor.execute(
+        f"""
+        INSERT OR IGNORE INTO {table_name} (code, label, ontology_suffix)
+        VALUES (?, ?, ?)
+        """,
+        (code, clean_label, ontology_suffix),
+    )
+
+    cache[clean_label] = code
+    return code
+
+
+def flush_batches(cursor, batches):
+    inserted_rows = 0
+
+    for table_name in batches:
+        rows = batches[table_name]
+        if not rows:
+            continue
+        cursor.executemany(INSERT_SQL[table_name], rows)
+        inserted_rows += len(rows)
+        rows.clear()
+
+    return inserted_rows
+
+
+def collect_color_codes(state, raw_value, table_name, cache_name, prefix):
+    colors = unique_values(split_csv_values(raw_value))
+    return [
+        get_or_create_color(state, table_name, cache_name, color, prefix)
+        for color in colors
+    ]
+
+
+def load_species(cursor):
+    if not SPECIES_CSV.exists():
+        raise FileNotFoundError(
+            "Missing species CSV: " + str(SPECIES_CSV)
+        )
+
+    state = create_loader_state(cursor)
+    batches = {table_name: [] for table_name in INSERT_SQL if table_name != "shop_product"}
+    loaded_rows = 0
+    skipped_rows = 0
+    start_time = time.time()
+
+    print("Loading species from " + SPECIES_CSV.name + " ...")
+    with open(SPECIES_CSV, newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+
+        for row in reader:
+            plant_id = to_int(row.get("id"))
+            if plant_id is None:
+                skipped_rows += 1
+                continue
+
+            family_id = None
+            family_name = to_text(row.get("family"))
+            family_common_name = to_text(row.get("family_common_name"))
+            if family_name:
+                family_id = get_or_create_family(state, family_name, family_common_name)
+
+            genus_id = None
+            genus_name = to_text(row.get("genus"))
+            if genus_name and family_id is not None:
+                genus_id = get_or_create_genus(state, genus_name, family_id)
+
+            growth_rate_code = GROWTH_RATE_MAP.get(normalize_key(row.get("growth_rate")))
+            growth_form_code = GROWTH_FORM_MAP.get(normalize_key(row.get("growth_form")))
+
+            batches["plant"].append(
+                (
+                    plant_id,
+                    to_text(row.get("scientific_name")),
+                    to_text(row.get("rank")),
+                    genus_id,
+                    family_id,
+                    to_int(row.get("year")),
+                    to_text(row.get("author")),
+                    to_text(row.get("bibliography")),
+                    to_text(row.get("common_name")),
+                    to_text(row.get("image_url")),
+                    to_int(row.get("ground_humidity")),
+                    growth_form_code,
+                    growth_rate_code,
+                    to_bool(row.get("vegetable")),
+                    to_bool(row.get("edible")),
+                    to_int(row.get("light")),
+                    to_int(row.get("soil_nutriments")),
+                    to_int(row.get("soil_salinity")),
+                    to_int(row.get("anaerobic_tolerance")),
+                    to_int(row.get("atmospheric_humidity")),
+                    to_real(row.get("average_height_cm")),
+                    to_real(row.get("maximum_height_cm")),
+                    to_real(row.get("minimum_root_depth_cm")),
+                    to_real(row.get("ph_maximum")),
+                    to_real(row.get("ph_minimum")),
+                    to_int(row.get("planting_days_to_harvest")),
+                    to_real(row.get("planting_row_spacing_cm")),
+                    to_real(row.get("planting_spread_cm")),
+                    to_text(row.get("url_wikipedia_en")),
+                )
+            )
+
+            seen_names = set()
+            primary_common_name = to_text(row.get("common_name"))
+            if primary_common_name:
+                seen_names.add(primary_common_name)
+                batches["plant_common_name"].append((plant_id, primary_common_name, 1))
+            for common_name in split_csv_values(row.get("common_names")):
+                if common_name in seen_names:
+                    continue
+                seen_names.add(common_name)
+                batches["plant_common_name"].append((plant_id, common_name, 0))
+
+            for synonym_name in unique_values(split_csv_values(row.get("synonyms"))):
+                batches["plant_synonym"].append((plant_id, synonym_name))
+
+            for habit in unique_values(split_csv_values(row.get("growth_habit"))):
+                habit_code = GROWTH_HABIT_MAP.get(normalize_key(habit))
+                if habit_code is not None:
+                    batches["plant_growth_habit"].append((plant_id, habit_code))
+
+            for month_number in unique_values(split_month_values(row.get("bloom_months"))):
+                batches["plant_bloom_month"].append((plant_id, month_number))
+            for month_number in unique_values(split_month_values(row.get("fruit_months"))):
+                batches["plant_fruit_month"].append((plant_id, month_number))
+            for month_number in unique_values(split_month_values(row.get("growth_months"))):
+                batches["plant_growth_month"].append((plant_id, month_number))
+
+            for edible_part in unique_values(split_csv_values(row.get("edible_part"))):
+                edible_part_code = EDIBLE_PART_MAP.get(normalize_key(edible_part))
+                if edible_part_code is not None:
+                    batches["plant_edible_part"].append((plant_id, edible_part_code))
+
+            flower_colors = collect_color_codes(
+                state,
+                row.get("flower_color"),
+                "flower_color_dim",
+                "flower_color_cache",
+                "FlowerColor_",
+            )
+            flower_conspicuous = to_bool(row.get("flower_conspicuous"))
+            if flower_colors or flower_conspicuous is not None:
+                batches["flower_component"].append((plant_id, flower_conspicuous))
+                for color_code in flower_colors:
+                    batches["plant_flower_color"].append((plant_id, color_code))
+
+            fruit_colors = collect_color_codes(
+                state,
+                row.get("fruit_color"),
+                "fruit_color_dim",
+                "fruit_color_cache",
+                "FruitColor_",
+            )
+            fruit_conspicuous = to_bool(row.get("fruit_conspicuous"))
+            if fruit_colors or fruit_conspicuous is not None:
+                batches["fruit_component"].append((plant_id, fruit_conspicuous))
+                for color_code in fruit_colors:
+                    batches["plant_fruit_color"].append((plant_id, color_code))
+
+            foliage_colors = collect_color_codes(
+                state,
+                row.get("foliage_color"),
+                "foliage_color_dim",
+                "foliage_color_cache",
+                "FoliageColor_",
+            )
+            foliage_texture_code = FOLIAGE_TEXTURE_MAP.get(normalize_key(row.get("foliage_texture")))
+            if foliage_colors or foliage_texture_code is not None:
+                batches["foliage_component"].append((plant_id, foliage_texture_code))
+                for color_code in foliage_colors:
+                    batches["plant_foliage_color"].append((plant_id, color_code))
+
+            for region_name in unique_values(split_csv_values(row.get("distributions"))):
+                region_id = get_or_create_region(state, region_name)
+                batches["plant_distribution"].append((plant_id, region_id))
+
+            loaded_rows += 1
+            if loaded_rows % BATCH_SIZE == 0:
+                flush_batches(cursor, batches)
+                print(f"  ... {loaded_rows:,} species processed", end="\r")
+
+    flush_batches(cursor, batches)
+    elapsed_seconds = time.time() - start_time
+    print(f"  Species loaded: {loaded_rows:,} rows (skipped {skipped_rows}) [{elapsed_seconds:.1f}s]")
+
+
+def load_shop_inventory(cursor):
+    if not SHOP_CSV.exists():
+        raise FileNotFoundError(
+            "Missing shop inventory CSV: "
+            + str(SHOP_CSV)
+            + ". Run scripts/generate_shop_data.py first."
+        )
+
+    rows = []
+
+    with open(SHOP_CSV, newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+
+        for row in reader:
+            care_level_text = to_text(row.get("care_level"))
+            temperature_text = to_text(row.get("temperature_category"))
+
+            product_id = to_int(row.get("product_id"))
+            plant_id = to_int(row.get("trefle_id"))
+            stock_quantity = to_int(row.get("stock_quantity"))
+            price_eur = to_real(row.get("price_eur"))
+            product_name = to_text(row.get("product_name"))
+            shelf_date = to_text(row.get("shelf_date"))
+
+            if product_id is None:
+                raise ValueError("Invalid product_id in shop inventory row")
+            if plant_id is None:
+                raise ValueError("Invalid trefle_id in shop inventory row")
+            if stock_quantity is None:
+                raise ValueError("Invalid stock_quantity in shop inventory row")
+            if price_eur is None:
+                raise ValueError("Invalid price_eur in shop inventory row")
+            if product_name is None:
+                raise ValueError("Missing product_name in shop inventory row")
+            if shelf_date is None:
+                raise ValueError("Missing shelf_date in shop inventory row")
+
+            rows.append(
+                (
+                    product_id,
+                    plant_id,
+                    product_name,
+                    stock_quantity,
+                    price_eur,
+                    shelf_date,
+                    CARE_LEVEL_MAP.get((care_level_text or "").lower()),
+                    TEMPERATURE_CATEGORY_MAP.get((temperature_text or "").lower()),
+                )
+            )
+
+    cursor.executemany(INSERT_SQL["shop_product"], rows)
+    print(f"  Shop inventory loaded: {len(rows)} rows")
+
+
+def print_summary(cursor):
+    table_names = [
+        "family",
+        "genus",
+        "plant",
+        "plant_common_name",
+        "plant_synonym",
+        "plant_growth_habit",
+        "plant_bloom_month",
+        "plant_fruit_month",
+        "plant_growth_month",
+        "plant_edible_part",
+        "flower_component",
+        "plant_flower_color",
+        "fruit_component",
+        "plant_fruit_color",
+        "foliage_component",
+        "plant_foliage_color",
+        "region",
+        "plant_distribution",
+        "shop_product",
+    ]
+
+    print("\nDatabase: " + str(DB_PATH))
+
+    for table_name in table_names:
+        row = cursor.execute("SELECT COUNT(*) FROM " + table_name).fetchone()
+        count = row[0]
+        print(f"  {table_name:<20} {count:,}")
+
+    joined_row = cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM shop_product sp
+        JOIN plant p ON p.plant_id = sp.plant_id
+        """
+    ).fetchone()
+    joined_count = joined_row[0]
+    db_size_mb = DB_PATH.stat().st_size / 1048576
+
+    print(f"  File size            {db_size_mb:.1f} MB")
+    print(f"  shop <> plant joins  {joined_count:,}")
 def main():
     if DB_PATH.exists():
         DB_PATH.unlink()
-        print(f"Removed existing {DB_PATH.name}")
+        print("Removed existing " + DB_PATH.name)
 
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
+    connection = sqlite3.connect(DB_PATH)
 
-    # Create tables
-    cur.execute(DDL_SPECIES)
-    cur.execute(DDL_SHOP)
-    con.commit()
+    try:
+        cursor = connection.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
 
-    # ---- Load species ----
-    print(f"Loading species from {SPECIES_CSV.name} …")
-    t0 = time.time()
-    batch = []
-    total = 0
-    skipped = 0
+        for ddl_statement in DDL:
+            cursor.execute(ddl_statement)
+        seed_dimensions(cursor)
+        connection.commit()
 
-    with open(SPECIES_CSV, newline="", encoding="utf-8") as f:
-        reader = csv.reader(f, delimiter="\t")
-        next(reader)  # skip header
-        for raw in reader:
-            parsed = parse_species_row(raw)
-            if parsed[0] is None:   # skip rows with no id
-                skipped += 1
-                continue
-            batch.append(parsed)
-            if len(batch) >= BATCH_SIZE:
-                cur.executemany(INSERT_SPECIES, batch)
-                total += len(batch)
-                batch = []
-                print(f"  … {total:,} rows inserted", end="\r")
+        load_species(cursor)
+        connection.commit()
 
-        if batch:
-            cur.executemany(INSERT_SPECIES, batch)
-            total += len(batch)
+        print("Loading shop inventory from " + SHOP_CSV.name + " ...")
+        load_shop_inventory(cursor)
+        connection.commit()
 
-    con.commit()
-    elapsed = time.time() - t0
-    print(f"  Species loaded: {total:,} rows  (skipped {skipped})  [{elapsed:.1f}s]")
+        print("Creating indexes ...")
+        for index_statement in INDEXES:
+            cursor.execute(index_statement)
+        connection.commit()
 
-    # ---- Load shop inventory ----
-    print(f"Loading shop inventory from {SHOP_CSV.name} …")
-    shop_rows = []
-    with open(SHOP_CSV, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for r in reader:
-            shop_rows.append((
-                int(r["product_id"]),
-                int(r["trefle_id"]),
-                r["scientific_name"] or None,
-                r["product_name"] or None,
-                int(r["stock_quantity"]),
-                float(r["price_eur"]),
-                r["shelf_date"] or None,
-                r["care_level"] or None,
-                r["temperature_category"] or None,
-            ))
-    cur.executemany(INSERT_SHOP, shop_rows)
-    con.commit()
-    print(f"  Shop inventory loaded: {len(shop_rows)} rows")
+        print_summary(cursor)
+    finally:
+        connection.close()
 
-    # ---- Create indexes ----
-    print("Creating indexes …")
-    for ddl in DDL_INDEXES:
-        cur.execute(ddl)
-    con.commit()
-
-    # ---- Summary ----
-    sp_count   = cur.execute("SELECT COUNT(*) FROM species").fetchone()[0]
-    sh_count   = cur.execute("SELECT COUNT(*) FROM shop_inventory").fetchone()[0]
-    db_size_mb = DB_PATH.stat().st_size / 1_048_576
-    print(f"\nDatabase: {DB_PATH}")
-    print(f"  species        : {sp_count:,} rows")
-    print(f"  shop_inventory : {sh_count:,} rows")
-    print(f"  File size      : {db_size_mb:.1f} MB")
-
-    # Quick join check
-    joined = cur.execute("""
-        SELECT COUNT(*)
-        FROM shop_inventory s
-        JOIN species p ON p.id = s.trefle_id
-    """).fetchone()[0]
-    print(f"  shop ⋈ species : {joined} rows matched (of {sh_count} shop rows)")
-
-    con.close()
 
 if __name__ == "__main__":
     main()

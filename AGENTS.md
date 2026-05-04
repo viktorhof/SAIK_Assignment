@@ -1,0 +1,23 @@
+# AGENTS
+
+- This project builds a plant management ontology from Trefle species data, generates a small mock shop inventory, and loads both into SQLite for OBDA and ontology-related tasks.
+- Keep code simple and direct.
+- A little Pythonic is fine, but do not get too clever.
+- Use basic, well-known libraries when useful.
+- Prefer the standard library when it is enough.
+- Do not add dependencies for small convenience.
+- Do not use Python type hints.
+- Use descriptive variable names, but do not overdo them.
+- Not everything needs a function.
+- Create functions mainly for reused logic or when they clearly make the code easier to read.
+- Prefer clear loops and conditionals over clever shortcuts.
+- Prefer readability over compact tricks.
+- Reuse existing project patterns before introducing a new style.
+- Do not overuse comments.
+- Add comments only for complex logic or when the purpose is not clear from the code.
+- Do not write comments that only restate the code.
+- Do not add extra abstraction unless it clearly helps.
+- Keep parsing, cleanup, and data handling rules easy to follow.
+- Fail clearly when input or data is invalid instead of hiding the problem.
+- Solve the task first. Do not add unnecessary features.
+- Prefer small, safe changes over large rewrites.

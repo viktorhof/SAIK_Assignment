@@ -218,7 +218,8 @@ Family = add_class(
     "Family",
     superclass=TaxonomicRank,
     label="Family",
-    comment="Taxonomic family (e.g. Pinaceae, Rosaceae). Maps to CSV column 'family'."
+    comment="Taxonomic family (e.g. Pinaceae, Rosaceae). Maps to CSV columns "
+            "'family' and 'family_common_name'."
 )
 Genus = add_class(
     "Genus",
@@ -598,6 +599,11 @@ hasCommonName = add_datatype_property(
     "hasCommonName", domain=Plant, range_=XSD.string,
     label="has common name",
     comment="Common name(s) of the plant. Multi-valued."
+)
+hasFamilyCommonName = add_datatype_property(
+    "hasFamilyCommonName", domain=Family, range_=XSD.string,
+    label="has family common name",
+    comment="Common-language name of the taxonomic family. Maps to CSV 'family_common_name'."
 )
 hasSynonymName = add_datatype_property(
     "hasSynonymName", domain=Plant, range_=XSD.string,
@@ -1051,10 +1057,20 @@ for iri_name, label in [
 # ---------------------------------------------------------------------------
 
 output_path = Path(__file__).parent.parent / "ontology" / "plant_management.ttl"
+rdf_output_path = Path(__file__).parent.parent / "ontology" / "plant_management.rdf"
 output_path.parent.mkdir(parents=True, exist_ok=True)
-g.serialize(str(output_path), format="turtle")
+
+
+def write_graph(path, rdf_format):
+    serialized = g.serialize(format=rdf_format)
+    path.write_text(serialized.rstrip() + "\n", encoding="utf-8")
+
+
+write_graph(output_path, "turtle")
+write_graph(rdf_output_path, "xml")
 
 print(f"Ontology written to: {output_path}")
+print(f"RDF/XML written to: {rdf_output_path}")
 print(f"  Triples : {len(g):,}")
 
 # Quick summary

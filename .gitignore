@@ -1,0 +1,7 @@
+.idea/
+scripts/__pycache__/
+*.pyc
+
+data/plantms.db
+data/raw/species.csv
+data/shop/inventory.csv

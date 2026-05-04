@@ -1,0 +1,670 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix plant: <http://www.semanticweb.org/plantms/ontology#> .
+
+# R2RML mapping for the normalized SQLite database created by scripts/load_database.py.
+# The schema materializes multi-valued CSV fields into link tables so the mappings
+# only need direct table scans or simple lookup joins.
+
+<#PlantTriplesMap>
+  rr:logicalTable [ rr:tableName "plant" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}";
+    rr:class plant:Plant
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "scientific_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasTrefleId;
+    rr:objectMap [ rr:column "plant_id"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasScientificName;
+    rr:objectMap [ rr:column "scientific_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasYear;
+    rr:objectMap [ rr:column "year"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasAuthor;
+    rr:objectMap [ rr:column "author" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasBibliography;
+    rr:objectMap [ rr:column "bibliography" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasImageUrl;
+    rr:objectMap [ rr:column "image_url"; rr:datatype xsd:anyURI ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasWikipediaUrl;
+    rr:objectMap [ rr:column "url_wikipedia_en"; rr:datatype xsd:anyURI ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasAverageHeightCm;
+    rr:objectMap [ rr:column "average_height_cm"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasMaximumHeightCm;
+    rr:objectMap [ rr:column "maximum_height_cm"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasMinimumRootDepthCm;
+    rr:objectMap [ rr:column "minimum_root_depth_cm"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasLightRequirement;
+    rr:objectMap [ rr:column "light"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasSoilNutriments;
+    rr:objectMap [ rr:column "soil_nutriments"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasSoilSalinity;
+    rr:objectMap [ rr:column "soil_salinity"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasGroundHumidity;
+    rr:objectMap [ rr:column "ground_humidity"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasAtmosphericHumidity;
+    rr:objectMap [ rr:column "atmospheric_humidity"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasAnaerobicTolerance;
+    rr:objectMap [ rr:column "anaerobic_tolerance"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPhMinimum;
+    rr:objectMap [ rr:column "ph_minimum"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPhMaximum;
+    rr:objectMap [ rr:column "ph_maximum"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPlantingDaysToHarvest;
+    rr:objectMap [ rr:column "planting_days_to_harvest"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPlantingRowSpacingCm;
+    rr:objectMap [ rr:column "planting_row_spacing_cm"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPlantingSpreadCm;
+    rr:objectMap [ rr:column "planting_spread_cm"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isEdible;
+    rr:objectMap [ rr:column "edible"; rr:datatype xsd:boolean ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isVegetable;
+    rr:objectMap [ rr:column "vegetable"; rr:datatype xsd:boolean ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:belongsToFamily;
+    rr:objectMap [
+      rr:parentTriplesMap <#FamilyTriplesMap>;
+      rr:joinCondition [ rr:child "family_id"; rr:parent "family_id" ]
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:belongsToGenus;
+    rr:objectMap [
+      rr:parentTriplesMap <#GenusTriplesMap>;
+      rr:joinCondition [ rr:child "genus_id"; rr:parent "genus_id" ]
+    ]
+  ] .
+
+<#FamilyTriplesMap>
+  rr:logicalTable [ rr:tableName "family" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/family/{family_name}";
+    rr:class plant:Family
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "family_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasFamilyCommonName;
+    rr:objectMap [ rr:column "family_common_name" ]
+  ] .
+
+<#GenusTriplesMap>
+  rr:logicalTable [ rr:tableName "genus" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/genus/{genus_name}";
+    rr:class plant:Genus
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "genus_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isSubsumedByFamily;
+    rr:objectMap [
+      rr:parentTriplesMap <#FamilyTriplesMap>;
+      rr:joinCondition [ rr:child "family_id"; rr:parent "family_id" ]
+    ]
+  ] .
+
+<#PlantCommonNamesTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_common_name" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasCommonName;
+    rr:objectMap [ rr:column "common_name" ]
+  ] .
+
+<#PlantSynonymsTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_synonym" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasSynonymName;
+    rr:objectMap [ rr:column "synonym_name" ]
+  ] .
+
+<#PlantGrowthRateTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant
+      JOIN growth_rate_dim ON growth_rate_dim.code = plant.growth_rate_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasGrowthRate;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantGrowthFormTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant
+      JOIN growth_form_dim ON growth_form_dim.code = plant.growth_form_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasGrowthForm;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantGrowthHabitTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant_growth_habit
+      JOIN growth_habit_dim ON growth_habit_dim.code = plant_growth_habit.growth_habit_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasGrowthHabit;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#MonthTriplesMap>
+  rr:logicalTable [ rr:tableName "month_dim" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+    rr:class plant:Month
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "label" ]
+  ] .
+
+<#PlantBloomMonthsTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_bloom_month" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:bloomsInMonth;
+    rr:objectMap [
+      rr:parentTriplesMap <#MonthTriplesMap>;
+      rr:joinCondition [ rr:child "month_number"; rr:parent "month_number" ]
+    ]
+  ] .
+
+<#PlantFruitMonthsTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_fruit_month" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:fruitingInMonth;
+    rr:objectMap [
+      rr:parentTriplesMap <#MonthTriplesMap>;
+      rr:joinCondition [ rr:child "month_number"; rr:parent "month_number" ]
+    ]
+  ] .
+
+<#PlantGrowthMonthsTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_growth_month" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:growsInMonth;
+    rr:objectMap [
+      rr:parentTriplesMap <#MonthTriplesMap>;
+      rr:joinCondition [ rr:child "month_number"; rr:parent "month_number" ]
+    ]
+  ] .
+
+<#PlantEdiblePartTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, part_ontology_suffix
+      FROM plant_edible_part
+      JOIN edible_part_dim ON edible_part_dim.code = plant_edible_part.edible_part_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasEdiblePart;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{part_ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantEdibleUseTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, use_ontology_suffix
+      FROM plant_edible_part
+      JOIN edible_part_dim ON edible_part_dim.code = plant_edible_part.edible_part_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPlantUse;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{use_ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantVegetableUseTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id
+      FROM plant
+      WHERE vegetable = 1
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPlantUse;
+    rr:objectMap [ rr:constant plant:VegetableUseIndividual ]
+  ] .
+
+<#FlowerComponentTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT flower_component.plant_id, flower_component.conspicuous, plant.scientific_name
+      FROM flower_component
+      JOIN plant ON plant.plant_id = flower_component.plant_id
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/flower/{plant_id}";
+    rr:class plant:Flower
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "scientific_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isComponentOf;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasFlowerConspicuous;
+    rr:objectMap [ rr:column "conspicuous"; rr:datatype xsd:boolean ]
+  ] .
+
+<#PlantToFlowerTriplesMap>
+  rr:logicalTable [ rr:tableName "flower_component" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasComponent;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/flower/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FlowerColorTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant_flower_color
+      JOIN flower_color_dim ON flower_color_dim.code = plant_flower_color.color_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/flower/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasColor;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FoliageComponentTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT foliage_component.plant_id, foliage_component.texture_code, plant.scientific_name
+      FROM foliage_component
+      JOIN plant ON plant.plant_id = foliage_component.plant_id
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/foliage/{plant_id}";
+    rr:class plant:Foliage
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "scientific_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isComponentOf;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantToFoliageTriplesMap>
+  rr:logicalTable [ rr:tableName "foliage_component" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasComponent;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/foliage/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FoliageColorTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant_foliage_color
+      JOIN foliage_color_dim ON foliage_color_dim.code = plant_foliage_color.color_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/foliage/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasColor;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FoliageTextureTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM foliage_component
+      JOIN foliage_texture_dim ON foliage_texture_dim.code = foliage_component.texture_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/foliage/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasFoliageTexture;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FruitComponentTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT fruit_component.plant_id, fruit_component.conspicuous, plant.scientific_name
+      FROM fruit_component
+      JOIN plant ON plant.plant_id = fruit_component.plant_id
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/fruit/{plant_id}";
+    rr:class plant:Fruit
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "scientific_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isComponentOf;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasFruitConspicuous;
+    rr:objectMap [ rr:column "conspicuous"; rr:datatype xsd:boolean ]
+  ] .
+
+<#PlantToFruitTriplesMap>
+  rr:logicalTable [ rr:tableName "fruit_component" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasComponent;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/fruit/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#FruitColorTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT plant_id, ontology_suffix
+      FROM plant_fruit_color
+      JOIN fruit_color_dim ON fruit_color_dim.code = plant_fruit_color.color_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/fruit/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasColor;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#RegionTriplesMap>
+  rr:logicalTable [ rr:tableName "region" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/region/{region_id}";
+    rr:class plant:Region
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "region_name" ]
+  ] .
+
+<#PlantDistributionTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_distribution" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/distribution/{plant_id}/{region_id}";
+    rr:class plant:PlantDistribution
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:distributionForPlant;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}";
+      rr:termType rr:IRI
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:inRegion;
+    rr:objectMap [
+      rr:parentTriplesMap <#RegionTriplesMap>;
+      rr:joinCondition [ rr:child "region_id"; rr:parent "region_id" ]
+    ]
+  ] .
+
+<#PlantToDistributionTriplesMap>
+  rr:logicalTable [ rr:tableName "plant_distribution" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasDistribution;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/distribution/{plant_id}/{region_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#ShopProductTriplesMap>
+  rr:logicalTable [ rr:tableName "shop_product" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/product/{product_id}";
+    rr:class plant:ShopProduct
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "product_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasProductId;
+    rr:objectMap [ rr:column "product_id"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasProductName;
+    rr:objectMap [ rr:column "product_name" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasStockQuantity;
+    rr:objectMap [ rr:column "stock_quantity"; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasPriceEur;
+    rr:objectMap [ rr:column "price_eur"; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasShelfDate;
+    rr:objectMap [ rr:column "shelf_date"; rr:datatype xsd:date ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:isShopProductFor;
+    rr:objectMap [
+      rr:parentTriplesMap <#PlantTriplesMap>;
+      rr:joinCondition [ rr:child "plant_id"; rr:parent "plant_id" ]
+    ]
+  ] .
+
+<#ShopProductCareLevelTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT product_id, ontology_suffix
+      FROM shop_product
+      JOIN care_level_dim ON care_level_dim.code = shop_product.care_level_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/product/{product_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasCareLevel;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#ShopProductTemperatureTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT product_id, ontology_suffix
+      FROM shop_product
+      JOIN temperature_category_dim
+        ON temperature_category_dim.code = shop_product.temperature_category_code
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/product/{product_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasTemperatureCategory;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/ontology#{ontology_suffix}";
+      rr:termType rr:IRI
+    ]
+  ] .
+
+<#PlantToShopProductTriplesMap>
+  rr:logicalTable [ rr:tableName "shop_product" ];
+  rr:subjectMap [
+    rr:template "http://www.semanticweb.org/plantms/resource/plant/{plant_id}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate plant:hasShopProduct;
+    rr:objectMap [
+      rr:template "http://www.semanticweb.org/plantms/resource/product/{product_id}";
+      rr:termType rr:IRI
+    ]
+  ] .
