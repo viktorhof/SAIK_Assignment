@@ -1,0 +1,366 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue
+}
+
+\newcommand{\artifact}[1]{\texttt{#1}}
+\newcommand{\placeholder}[1]{\textcolor{red}{[PLACEHOLDER: #1]}}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false
+}
+
+\title{Plant Management Ontology Project Report}
+\author{SAIKS Assignment SS 2026}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+
+This report describes the current state of the Plant Management ontology project.
+The project uses the Trefle species dataset and a small generated shop inventory.
+The goal is to create an ontology-based application for plant management and shop
+queries.
+
+The current work covers the ontology, the relational database setup, the R2RML
+mapping, OOPS ontology verification, SHACL rule definitions, and a first manual
+ontology alignment. The GraphDB export, SHACL validation report, tool-based
+alignment result, and the RAG application are not finished yet and are marked as
+placeholders where needed.
+
+\section{Assignment Requirements}
+
+The assignment has five main steps:
+
+\begin{enumerate}
+  \item Advanced ontology engineering.
+  \item Knowledge graph creation through OBDA.
+  \item Verification of semantic structures.
+  \item Ontology alignment.
+  \item A simple KG-based RAG application.
+\end{enumerate}
+
+The final submission should contain the ontology, OBDA artifacts, SHACL files
+and reports, an alignment result, the RAG application, and this project report.
+
+\section{Domain And Application Idea}
+
+The domain is plant management for a small plant shop. The ontology should
+describe plant species, taxonomy, plant parts, plant use, growth properties,
+geographic distribution, and shop products.
+
+The application should support questions such as:
+
+\begin{itemize}
+  \item Which plants belong to a given family or genus?
+  \item Which plants have specific flower, fruit, or foliage properties?
+  \item Which plants are edible or have edible parts?
+  \item Which shop products are easy care, warm temperature plants, or low stock?
+  \item Which products have been on the shelf for a long time?
+\end{itemize}
+
+\section{Step 1: Ontology Engineering}
+
+The base ontology is generated with \artifact{scripts/generate\_ontology.py}.
+The main output is \artifact{ontology/plant\_management.ttl}. The ontology
+documentation is in \artifact{ontology/README.md}.
+
+\begin{lstlisting}[language=bash,caption={Recreate the base ontology artifact.}]
+python scripts/generate_ontology.py
+\end{lstlisting}
+
+\subsection{Ontology Metrics}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Metric & Count \\
+\midrule
+Triples & 1,011 \\
+Classes & 38 \\
+Object properties & 27 \\
+Datatype properties & 33 \\
+Named individuals & 86 \\
+\bottomrule
+\end{tabular}
+\caption{Base ontology metrics.}
+\end{table}
+
+\subsection{Main Modeling Choices}
+
+The ontology uses classes for plant taxonomy, plant parts, growth descriptors,
+temporal values, geographic regions, plant use, edible parts, and shop products.
+The class \artifact{Plant} represents one plant species. \artifact{Family} and
+\artifact{Genus} model taxonomy. \artifact{ShopProduct} represents a product
+line in the shop inventory.
+
+The ontology uses several OWL2 features:
+
+\begin{itemize}
+  \item disjoint classes and disjoint unions for controlled vocabularies;
+  \item property chains for taxonomy inference;
+  \item inverse object properties;
+  \item functional properties for values that should be unique;
+  \item qualified cardinality and existential restrictions;
+  \item datatype restrictions for numeric values.
+\end{itemize}
+
+\subsection{Ontology Design Patterns}
+
+The current ontology uses these design patterns:
+
+\begin{itemize}
+  \item Componency pattern for plant parts such as flower, foliage, fruit, and root.
+  \item N-ary relation pattern for plant distribution with region and status.
+  \item AgentRole pattern for plant uses such as edible, vegetable, and ornamental.
+\end{itemize}
+
+\section{Step 2: KG Creation Through OBDA}
+
+The database is built from the Trefle species CSV and the generated shop
+inventory CSV. These large local data files are ignored by git and can be
+regenerated. The loader is \artifact{scripts/load\_database.py}. The SQLite
+database is \artifact{data/plantms.db}.
+
+\begin{lstlisting}[language=bash,caption={Recreate the Step 2 data artifacts.}]
+python scripts/generate_shop_data.py
+python scripts/load_database.py
+\end{lstlisting}
+
+\subsection{Database Input}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+Artifact & Purpose \\
+\midrule
+\artifact{data/raw/species.csv} & Local Trefle species dataset, not tracked in git \\
+\artifact{data/shop/inventory.csv} & Generated mock shop inventory, not tracked in git \\
+\artifact{data/plantms.db} & Generated SQLite database for OBDA, not tracked in git \\
+\bottomrule
+\end{tabular}
+\caption{Database input and output artifacts.}
+\end{table}
+
+\subsection{Database Metrics}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Table & Rows \\
+\midrule
+\artifact{plant} & 416,473 \\
+\artifact{family} & 580 \\
+\artifact{genus} & 15,540 \\
+\artifact{plant\_common\_name} & 75,198 \\
+\artifact{plant\_synonym} & 633,831 \\
+\artifact{plant\_distribution} & 1,306,113 \\
+\artifact{shop\_product} & 95 \\
+\bottomrule
+\end{tabular}
+\caption{Important SQLite table sizes.}
+\end{table}
+
+The shop inventory joins to the plant table for all 95 shop rows. Multi-value
+CSV fields are normalized into link tables. This keeps the R2RML mappings easier
+to read.
+
+\subsection{R2RML Mapping}
+
+The mapping file is \artifact{plant\_management\_r2rml.ttl}. It maps
+database rows to ontology individuals. The mapping covers plants, taxonomy,
+plant names, synonyms, months, plant distribution, plant parts, colors, and shop
+products.
+
+\placeholder{Add GraphDB repository export or materialized KG file when it is available.}
+
+\section{Step 3: Verification Of Semantic Structures}
+
+Step 3 has two parts: ontology verification with OOPS and KG verification with
+SHACL. The OOPS fixes and the SHACL rule file are implemented. The manual OOPS
+re-scan and the SHACL validation report are still open.
+
+\subsection{OOPS Scan}
+
+The original OOPS scan output is stored in
+\artifact{data/oops\_scan/}. A written summary is stored in
+\artifact{OOPS\_FINDINGS.md}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llr}
+\toprule
+Pitfall & Meaning & Count \\
+\midrule
+P04 & Unconnected ontology elements & 3 \\
+P13 & Missing inverse relationships & 19 \\
+P19 & Multiple domains or ranges & 16 \\
+P29 & Wrong transitive relationships & 2 \\
+P41 & Missing license & 1 \\
+\bottomrule
+\end{tabular}
+\caption{OOPS findings from the first scan.}
+\end{table}
+
+\subsection{OOPS Fixes}
+
+The OOPS fixes are reproducible with
+\artifact{scripts/apply\_oops\_fixes.py}. This script reads the original ontology
+artifact and writes separate fixed artifacts:
+\artifact{ontology/plant\_management\_oops\_fixed.ttl} and
+\artifact{ontology/plant\_management\_oops\_fixed.rdf}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lr}
+\toprule
+Metric & Count \\
+\midrule
+Triples & 1,127 \\
+Classes & 37 \\
+Object properties & 48 \\
+Datatype properties & 33 \\
+Named individuals & 86 \\
+\bottomrule
+\end{tabular}
+\caption{OOPS-fixed ontology metrics.}
+\end{table}
+
+The fixes remove the unused \artifact{TimeInterval} class, add useful inverse
+properties, remove transitivity from \artifact{hasPart} and \artifact{isPartOf},
+add a CC BY 4.0 license, and make numeric datatype ranges clearer.
+
+\begin{lstlisting}[language=bash,caption={Recreate the OOPS-fixed ontology artifacts.}]
+python scripts/generate_ontology.py
+python scripts/apply_oops_fixes.py
+\end{lstlisting}
+
+\placeholder{Run the online OOPS scanner again on the fixed ontology and add the new result.}
+
+\subsection{SHACL Validation}
+
+The SHACL rules are stored in
+\artifact{plant\_management\_shapes.ttl}. They are intended for the
+materialized knowledge graph together with the OOPS-fixed ontology.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+Rule area & Main checks \\
+\midrule
+Plant identity & Trefle id and scientific name \\
+Taxonomy & optional genus/family links and required genus-family links \\
+Numeric values & scale values, pH, height, price, and stock \\
+Temporal values & month links and season links \\
+Plant parts & component links, colors, and foliage texture \\
+Distribution & plant, region, and distribution status \\
+Shop products & product id, name, plant link, care, and temperature \\
+Cross checks & pH min/max and shop inverse link \\
+\bottomrule
+\end{tabular}
+\caption{SHACL rule groups added for KG validation.}
+\end{table}
+
+\placeholder{Run the SHACL rules with TopBraid SHACL engine or SHACL4Protege and add the validation report.}
+
+\section{Step 4: Ontology Alignment}
+
+The selected external ontology is the Plant Ontology (PO). PO was selected
+because it describes plant anatomy, morphology, and development. This fits the
+local ontology better than broader agriculture vocabularies.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+Candidate & Fit & Reason \\
+\midrule
+Plant Ontology & Best & Direct match for plant structures \\
+Plant Trait Ontology & Good & Useful for traits, but less direct for classes \\
+AGROVOC & Medium & Broad agriculture thesaurus \\
+Crop Ontology & Medium-low & More focused on crop breeding variables \\
+ENVO & Medium-low & Useful for environment, not plant parts \\
+NCBI Taxonomy & Low & Needs taxon ids that are not in the data \\
+\bottomrule
+\end{tabular}
+\caption{Checked ontology candidates for Task 4.}
+\end{table}
+
+The first alignment artifact is
+\artifact{plant\_management\_po\_alignment.ttl}. The mappings are
+manual and conservative. Exact mappings are used only for concepts with the same
+meaning, such as flower, fruit, and root. Foliage is only a close match to PO
+leaf because the concepts are related but not exactly equal.
+
+This first alignment file is useful for documenting the intended mappings, but
+it is not yet a tool-generated Alignment API result.
+
+\placeholder{Run an ontology alignment tool and store the result in Alignment API format or another accepted format, if required by the course.}
+
+\section{Step 5: KG-Based RAG Application}
+
+\placeholder{Build a simple question-answering application over the knowledge graph.}
+
+\placeholder{Document supported question types, limitations, and example answers.}
+
+\section{Artifact Overview}
+
+\begin{longtable}{p{0.42\linewidth}p{0.48\linewidth}}
+\toprule
+Artifact & Description \\
+\midrule
+\artifact{ontology/plant\_management.ttl} & Base ontology generated in Step 1. \\
+\artifact{ontology/plant\_management.rdf} & RDF/XML export of the base ontology. \\
+\artifact{ontology/plant\_management\_oops\_fixed.ttl} & Ontology after OOPS fixes. \\
+\artifact{ontology/plant\_management\_oops\_fixed.rdf} & RDF/XML export after OOPS fixes. \\
+\artifact{ontology/README.md} & Detailed ontology documentation. \\
+\artifact{plant\_management\_r2rml.ttl} & R2RML mapping for OBDA. \\
+\artifact{data/plantms.db} & Generated local SQLite database, not tracked in git. \\
+\artifact{data/raw/species.csv} & Local Trefle species data, not tracked in git. \\
+\artifact{data/shop/inventory.csv} & Generated mock shop inventory, not tracked in git. \\
+\artifact{data/oops\_scan/} & Original OOPS scan export. \\
+\artifact{plant\_management\_shapes.ttl} & SHACL rules for KG validation. \\
+\artifact{plant\_management\_validation\_report.ttl} & Expected SHACL validation report artifact. \\
+\artifact{plant\_management\_po\_alignment.ttl} & Manual first-stage Plant Ontology alignment artifact. \\
+\artifact{OOPS\_FINDINGS.md} & Written summary of the first OOPS findings. \\
+\artifact{OOPS\_FIXES.md} & Written summary of the applied OOPS fixes. \\
+\artifact{scripts/generate\_ontology.py} & Base ontology generator. \\
+\artifact{scripts/load\_database.py} & SQLite loader. \\
+\artifact{scripts/apply\_oops\_fixes.py} & Reproducible OOPS fix script. \\
+\bottomrule
+\end{longtable}
+
+\section{Current Status}
+
+Steps 1 and 2 have working artifacts. Step 3 has OOPS findings, OOPS fixes, and
+SHACL rule definitions. Step 4 has a first manual Plant Ontology alignment. The
+fixed ontology still needs a new manual OOPS scan. The GraphDB export, SHACL
+validation report, tool-based alignment result, and the RAG application are
+still open.
+
+\end{document}

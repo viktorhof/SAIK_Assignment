@@ -1,0 +1,38 @@
+@prefix plant: <http://www.semanticweb.org/plantms/ontology#> .
+@prefix po: <http://purl.obolibrary.org/obo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.semanticweb.org/plantms/alignment/plant-ontology>
+    a owl:Ontology ;
+    dcterms:title "Plant Management to Plant Ontology Alignment"@en ;
+    dcterms:description "Manual first-stage alignment between the local Plant Management ontology and the external Plant Ontology."@en ;
+    dcterms:created "2026-05-03"^^xsd:date ;
+    owl:imports <http://purl.obolibrary.org/obo/po.owl> .
+
+plant:PlantPart
+    rdfs:subClassOf po:PO_0009011 ;
+    skos:closeMatch po:PO_0009011 ;
+    rdfs:comment "Local plant parts are modeled as structural parts, so they are narrower than PO plant structure."@en .
+
+plant:Flower
+    owl:equivalentClass po:PO_0009046 ;
+    skos:exactMatch po:PO_0009046 ;
+    rdfs:comment "Both classes represent a flower as a plant structure."@en .
+
+plant:Fruit
+    owl:equivalentClass po:PO_0009001 ;
+    skos:exactMatch po:PO_0009001 ;
+    rdfs:comment "Both classes represent fruit as a plant structure."@en .
+
+plant:Root
+    owl:equivalentClass po:PO_0009005 ;
+    skos:exactMatch po:PO_0009005 ;
+    rdfs:comment "Both classes represent a plant root."@en .
+
+plant:Foliage
+    skos:closeMatch po:PO_0025034 ;
+    rdfs:comment "Local foliage describes the visible leaf part of a plant, while PO leaf is a more exact botanical structure."@en .
