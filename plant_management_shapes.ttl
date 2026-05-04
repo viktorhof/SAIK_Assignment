@@ -1,0 +1,318 @@
+@prefix plant: <http://www.semanticweb.org/plantms/ontology#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+plant:PlantIdentityShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:property [
+        sh:path plant:hasTrefleId ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every plant must have exactly one Trefle id." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasScientificName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minLength 1 ;
+        sh:message "Every plant must have exactly one scientific name." ;
+    ] .
+
+plant:PlantTaxonomyShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:property [
+        sh:path plant:belongsToGenus ;
+        sh:class plant:Genus ;
+        sh:maxCount 1 ;
+        sh:message "A plant can have at most one genus, and it must be a Genus individual." ;
+    ] ;
+    sh:property [
+        sh:path plant:belongsToFamily ;
+        sh:class plant:Family ;
+        sh:maxCount 1 ;
+        sh:message "A plant can have at most one family, and it must be a Family individual." ;
+    ] .
+
+plant:GenusFamilyShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Genus ;
+    sh:property [
+        sh:path plant:isSubsumedByFamily ;
+        sh:class plant:Family ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every genus must point to exactly one family." ;
+    ] .
+
+plant:PlantScaleValueShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:property [
+        sh:path plant:hasLightRequirement ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Light requirement must be an integer from 0 to 10." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasSoilNutriments ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Soil nutriments must be an integer from 0 to 10." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasSoilSalinity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Soil salinity must be an integer from 0 to 10." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasGroundHumidity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Ground humidity must be an integer from 0 to 10." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasAtmosphericHumidity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Atmospheric humidity must be an integer from 0 to 10." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasAnaerobicTolerance ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Anaerobic tolerance must be an integer from 0 to 10." ;
+    ] .
+
+plant:PlantMeasurementShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:property [
+        sh:path plant:hasMaximumHeightCm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:message "Maximum height must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasAverageHeightCm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:message "Average height must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasMinimumRootDepthCm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:message "Minimum root depth must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPlantingDaysToHarvest ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:message "Days to harvest must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPlantingRowSpacingCm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:message "Row spacing must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPlantingSpreadCm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:message "Planting spread must not be negative." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPhMinimum ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 14 ;
+        sh:message "Minimum pH must be between 0 and 14." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPhMaximum ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 14 ;
+        sh:message "Maximum pH must be between 0 and 14." ;
+    ] ;
+    sh:sparql [
+        sh:message "Minimum pH must not be greater than maximum pH." ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this plant:hasPhMinimum ?minPh ;
+                      plant:hasPhMaximum ?maxPh .
+                FILTER (?minPh > ?maxPh)
+            }
+        """ ;
+    ] .
+
+plant:PlantTemporalShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:property [
+        sh:path plant:bloomsInMonth ;
+        sh:class plant:Month ;
+        sh:message "Bloom month values must be Month individuals." ;
+    ] ;
+    sh:property [
+        sh:path plant:fruitingInMonth ;
+        sh:class plant:Month ;
+        sh:message "Fruiting month values must be Month individuals." ;
+    ] ;
+    sh:property [
+        sh:path plant:growsInMonth ;
+        sh:class plant:Month ;
+        sh:message "Growth month values must be Month individuals." ;
+    ] .
+
+plant:MonthSeasonShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Month ;
+    sh:property [
+        sh:path plant:inSeason ;
+        sh:class plant:Season ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every month must be linked to exactly one season." ;
+    ] .
+
+plant:PlantPartShape
+    a sh:NodeShape ;
+    sh:targetClass plant:PlantPart ;
+    sh:property [
+        sh:path plant:isComponentOf ;
+        sh:class plant:Plant ;
+        sh:minCount 1 ;
+        sh:message "Every generated plant part must belong to at least one plant." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasColor ;
+        sh:class plant:Color ;
+        sh:message "Plant part colors must be Color individuals." ;
+    ] .
+
+plant:FoliageShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Foliage ;
+    sh:property [
+        sh:path plant:hasFoliageTexture ;
+        sh:class plant:FoliageTexture ;
+        sh:maxCount 1 ;
+        sh:message "Foliage can have at most one foliage texture." ;
+    ] .
+
+plant:PlantDistributionShape
+    a sh:NodeShape ;
+    sh:targetClass plant:PlantDistribution ;
+    sh:property [
+        sh:path plant:distributionForPlant ;
+        sh:class plant:Plant ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Each distribution node must refer to exactly one plant." ;
+    ] ;
+    sh:property [
+        sh:path plant:inRegion ;
+        sh:class plant:Region ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Each distribution node must refer to exactly one region." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasDistributionStatus ;
+        sh:class plant:DistributionStatus ;
+        sh:maxCount 1 ;
+        sh:message "Distribution status must be a DistributionStatus individual." ;
+    ] .
+
+plant:ShopProductShape
+    a sh:NodeShape ;
+    sh:targetClass plant:ShopProduct ;
+    sh:property [
+        sh:path plant:hasProductId ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every shop product must have exactly one product id." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasProductName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minLength 1 ;
+        sh:message "Every shop product must have exactly one product name." ;
+    ] ;
+    sh:property [
+        sh:path plant:isShopProductFor ;
+        sh:class plant:Plant ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every shop product must point to exactly one plant." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasStockQuantity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Stock quantity must be a non-negative integer." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasPriceEur ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Price must be a non-negative decimal." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasShelfDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every shop product must have exactly one shelf date." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasCareLevel ;
+        sh:class plant:CareLevel ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every shop product must have exactly one care level." ;
+    ] ;
+    sh:property [
+        sh:path plant:hasTemperatureCategory ;
+        sh:class plant:TemperatureCategory ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every shop product must have exactly one temperature category." ;
+    ] .
+
+plant:PlantShopLinkShape
+    a sh:NodeShape ;
+    sh:targetClass plant:Plant ;
+    sh:sparql [
+        sh:message "If a plant links to a shop product, the shop product must link back to the same plant." ;
+        sh:select """
+            SELECT $this ?product
+            WHERE {
+                $this plant:hasShopProduct ?product .
+                FILTER NOT EXISTS {
+                    ?product plant:isShopProductFor $this .
+                }
+            }
+        """ ;
+    ] .
