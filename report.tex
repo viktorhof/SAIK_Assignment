@@ -324,9 +324,52 @@ it is not yet a tool-generated Alignment API result.
 
 \section{Step 5: KG-Based RAG Application}
 
-\placeholder{Build a simple question-answering application over the knowledge graph.}
+The RAG application answers natural-language plant questions from the indexed knowledge base.
 
-\placeholder{Document supported question types, limitations, and example answers.}
+\subsection{Architecture}
+
+The pipeline has three stages:
+
+\begin{enumerate}
+  \item \textbf{Indexing} (\artifact{scripts/rag\_index.py}) -- three sources are
+    parsed into text chunks and embedded using
+    \texttt{sentence-transformers/all-MiniLM-L6-v2}:
+    \begin{itemize}
+      \item \artifact{ontology/plant\_management\_oops\_fixed.ttl} -- one chunk per
+        OWL class, per property, per named-individual group, plus five hand-crafted
+        summary chunks for the three ODPs, the taxonomy chain axiom, and the shop
+        layer schema.
+      \item \artifact{ontology/README.md} -- one chunk per \texttt{\#\#} section
+        (class hierarchy, properties, ODP descriptions, competency questions).
+      \item \artifact{data/shop/inventory.csv} -- one chunk per product row, with
+        all attributes inlined as prose.
+    \end{itemize}
+    The resulting index (\artifact{rag/index.pkl}) contains \textbf{246 chunks}.
+
+  \item \textbf{Retrieval} (\artifact{scripts/rag\_query.py}) -- the user query is
+    embedded with the same model and the top-8 most similar chunks are selected by
+    dot-product ranking (configurable with \texttt{--top-k}).
+
+  \item \textbf{Generation} -- the retrieved chunks are passed as numbered context
+    passages to a local \textbf{Llama~3} model running via Ollama and LangChain.
+    A strict system prompt instructs the model to answer only from the provided
+    context and to return ``I cannot find that information in the current knowledge
+    base'' when the answer is absent.
+\end{enumerate}
+
+\subsection{Query Interface}
+
+The CLI supports three modes:
+\begin{enumerate}
+\item \textbf{Interactive session}
+\\python3 scripts/rag\_query.py
+
+\item \textbf{Single query}
+\\python3 scripts/rag\_query.py --query "Which plants bloom in January?"
+
+\item \textbf{Run all 12 competency questions automatically}
+\\python3 scripts/rag\_query.py --demo
+\end{enumerate}
 
 \section{Artifact Overview}
 
@@ -352,6 +395,9 @@ Artifact & Description \\
 \artifact{scripts/generate\_ontology.py} & Base ontology generator. \\
 \artifact{scripts/load\_database.py} & SQLite loader. \\
 \artifact{scripts/apply\_oops\_fixes.py} & Reproducible OOPS fix script. \\
+\artifact{scripts/rag\_index.py} & RAG indexing pipeline (TTL + README + shop CSV → vector index). \\
+\artifact{scripts/rag\_query.py} & RAG CLI query interface (interactive, single-query, and demo mode). \\
+\artifact{rag/index.pkl} & Serialized vector index (246 chunks, not tracked in git). \\
 \bottomrule
 \end{longtable}
 

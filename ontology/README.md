@@ -572,3 +572,45 @@ Plant and (hasGrowthHabit value Tree)
 5. **Color IRI disambiguation** — Colors like "Green" appear in both FlowerColor and FoliageColor. Named individuals use prefixed IRIs (`FlowerColor_Green`, `FoliageColor_Green`) to avoid type conflicts.
 
 6. **Temperature not in Trefle CSV** — `TemperatureCategory` (Warm/Cool/Moderate) is assigned manually per species in `data/shop/inventory.csv`. It cannot be derived automatically from Trefle data.
+
+---
+
+## 11. RAG Application
+
+### Scripts
+
+scripts/rag_index.py   — builds rag/index.pkl from TTL + README + shop CSV
+scripts/rag_query.py   — CLI query interface (interactive / single / demo mode)
+
+### Usage
+
+**Prerequisites:** This RAG application runs 100% locally and privately using LangChain and Ollama. Before running the queries, you must install [Ollama](https://ollama.com) and download the Llama 3 model by running `ollama run llama3` in your terminal.
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Build the index (run once; rebuild if source files change)
+python3 scripts/rag_index.py
+
+# 3. Query — interactive session
+python3 scripts/rag_query.py
+
+# Single query
+python3 scripts/rag_query.py --query "Which plants have blue flowers?"
+
+# Run all 12 competency questions automatically
+python3 scripts/rag_query.py --demo
+
+# Show which chunks were retrieved (useful for evaluation)
+python3 scripts/rag_query.py --verbose --query "What is the Componency ODP?"
+```
+
+### Supported Question Types
+
+| Type | Example |
+|---|---|
+| Plant biology | "Which plants bloom in January?" / "Which plants have blue flowers?" |
+| Taxonomy | "Which plants belong to family Pinaceae?" |
+| Ecological | "Which plants grow in poor soil?" |
+| Shop inventory | "Which easy-care plants cost under €30?" |

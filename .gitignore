@@ -1,7 +1,11 @@
 .idea/
 scripts/__pycache__/
 *.pyc
+.DS_Store
 
 data/plantms.db
 data/raw/species.csv
 data/shop/inventory.csv
+
+rag/index.pkl
+rag/meta.json

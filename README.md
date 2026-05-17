@@ -39,7 +39,7 @@ requirements.txt             # Python dependencies
 | Step 2: OBDA KG creation | Partly done | R2RML mappings and generation scripts exist. Local CSV/DB artifacts are ignored by git. GraphDB materialized KG export is still open. |
 | Step 3: Verification | Partly done | OOPS scan, OOPS fixes, and SHACL rules exist. SHACL validation report is still open. |
 | Step 4: Alignment | First stage done | Plant Ontology was selected and a manual alignment artifact exists. Tool-based Alignment API result is still open if required. |
-| Step 5: RAG application | Open | Source code and usage documentation still need to be created. |
+| Step 5: RAG application | Done | Source code and usage documentation created. |
 
 ---
 
@@ -206,6 +206,36 @@ Candidate overview:
 | Crop Ontology (CO) | Medium-low | Strong for crop breeding variables, but the project covers many plant types. |
 | ENVO | Medium-low | Useful for environment and habitat, but not the main project focus. |
 | NCBI Taxonomy | Low for now | Useful for taxa, but the data does not contain NCBI taxon ids. |
+
+## Step 5: RAG Application
+
+### Architecture
+
+The RAG application answers natural-language questions strictly from three
+indexed knowledge sources. No external plant knowledge is used.
+
+| Phase | Component | Detail |
+|---|---|---|
+| **Indexing** | TTL parser | rdflib; one chunk per class, property, individual group, plus 5 hand-crafted ODP/schema summary chunks |
+| | README parser | regex split on `##` headings; one chunk per section |
+| | CSV parser | pandas; one chunk per shop product row |
+| **Retrieval** | Embedder | `sentence-transformers/all-MiniLM-L6-v2` (384-dim, unit-normalised cosine similarity) |
+| | Top-K | 8 chunks per query (configurable via `--top-k`) |
+| **Generation** | LLM | Llama 3 running locally via Ollama + LangChain |
+| | Grounding | System prompt enforces strict "answer only from context" policy |
+
+### Index Statistics (`rag/meta.json`)
+
+| Source | Chunks |
+|---|---|
+| `ontology_class` | 37 |
+| `ontology_property` | 81 |
+| `ontology_individual` | 16 |
+| `ontology_odp` | 5 |
+| `ontology_header` | 1 |
+| `readme` | 11 |
+| `shop_inventory` | 95 |
+| **Total** | **246** |
 
 ## Report
 

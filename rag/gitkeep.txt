@@ -1,0 +1,4 @@
+# This directory is created by scripts/rag_index.py
+# Generated files (ignored by git):
+#   index.pkl   – serialized vector index
+#   meta.json   – indexing statistics
