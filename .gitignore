@@ -1,11 +1,16 @@
 .idea/
+.direnv/
+.env
+.tools/
+.venv/
+.venv-wsl/
 scripts/__pycache__/
 *.pyc
 .DS_Store
 
 data/plantms.db
+data/plantms_full_kg.ttl
+data/plantms_full_kg.nt
+data/plantms_full_kg_parts/
 data/raw/species.csv
 data/shop/inventory.csv
-
-rag/index.pkl
-rag/meta.json

@@ -1,16 +1,5 @@
-# ── Step 1–4 dependencies ────────────────────────────────────────────────────
+# Project dependencies
 rdflib>=7.0.0
 pandas>=2.2.0
 matplotlib>=3.8.0
 seaborn>=0.13.0
-
-# ── Step 5: RAG application ───────────────────────────────────────────────────
-# LangChain Community - Connects Python to the local Ollama engine (generation)
-langchain-community>=0.0.30
-
-# Sentence-transformers – semantic embeddings (retrieval)
-# Downloads the 'all-MiniLM-L6-v2' model (~80 MB) on first run.
-# Requires PyTorch (installed automatically as a transitive dependency).
-sentence-transformers>=3.0.0
-
-numpy>=1.26.0

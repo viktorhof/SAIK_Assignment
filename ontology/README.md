@@ -577,33 +577,42 @@ Plant and (hasGrowthHabit value Tree)
 
 ## 11. RAG Application
 
-### Scripts
+### Script
 
-scripts/rag_index.py   — builds rag/index.pkl from TTL + README + shop CSV
-scripts/rag_query.py   — CLI query interface (interactive / single / demo mode)
+`scripts/rag_query.py` is the CLI query interface.
 
 ### Usage
 
-**Prerequisites:** This RAG application runs 100% locally and privately using LangChain and Ollama. Before running the queries, you must install [Ollama](https://ollama.com) and download the Llama 3 model by running `ollama run llama3` in your terminal.
+**Prerequisites:** Load the KG into GraphDB repository `plantms` and configure
+one LLM provider. For the local route, install [Ollama](https://ollama.com) and
+download the Llama 3 model with `ollama pull llama3`. For the OpenAI API route,
+copy `.env.example` to the ignored `.env` file, replace the API-key placeholder,
+and pass `--provider openai`. The query CLI loads `.env` automatically.
+
+The default route follows lecture Approach #1: retrieve relevant ontology terms
+and labeled KG entities, generate a read-only SPARQL query with the selected
+model provider, execute the query against GraphDB, and generate an answer
+grounded in the returned rows. It does not use embeddings or a vector database.
 
 ```bash
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. Build the index (run once; rebuild if source files change)
-python3 scripts/rag_index.py
-
-# 3. Query — interactive session
+# 2. Query - interactive session
 python3 scripts/rag_query.py
 
 # Single query
 python3 scripts/rag_query.py --query "Which plants have blue flowers?"
 
-# Run all 12 competency questions automatically
+# OpenAI Responses API route
+python3 scripts/rag_query.py --provider openai --query "Which plants have blue flowers?"
+
+# Run the demo questions automatically
 python3 scripts/rag_query.py --demo
 
-# Show which chunks were retrieved (useful for evaluation)
-python3 scripts/rag_query.py --verbose --query "What is the Componency ODP?"
+# Show retrieved ontology/entity candidates and generated SPARQL
+python3 scripts/rag_query.py --show-plan --query "Which plants have blue flowers?"
+
 ```
 
 ### Supported Question Types

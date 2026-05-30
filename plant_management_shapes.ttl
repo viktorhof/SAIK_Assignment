@@ -150,6 +150,7 @@ plant:PlantMeasurementShape
     sh:sparql [
         sh:message "Minimum pH must not be greater than maximum pH." ;
         sh:select """
+            PREFIX plant: <http://www.semanticweb.org/plantms/ontology#>
             SELECT $this
             WHERE {
                 $this plant:hasPhMinimum ?minPh ;
@@ -307,6 +308,7 @@ plant:PlantShopLinkShape
     sh:sparql [
         sh:message "If a plant links to a shop product, the shop product must link back to the same plant." ;
         sh:select """
+            PREFIX plant: <http://www.semanticweb.org/plantms/ontology#>
             SELECT $this ?product
             WHERE {
                 $this plant:hasShopProduct ?product .

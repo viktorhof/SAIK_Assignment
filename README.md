@@ -1,252 +1,363 @@
-# SAIK_Assignment
+# Plant Management Knowledge Graph
 
-Semantic AI and Knowledge Systems (SAIK) assignment - Plant Management System Ontology.
-Data source: [Trefle](https://trefle.io/) `species.csv` (54 columns, ~416k plant species rows).
+Semantic AI and Knowledge Systems assignment based on the
+[Trefle](https://trefle.io/) species dataset. The project builds an OWL
+ontology, loads plant and mock-shop data into SQLite, materializes an RDF
+knowledge graph, imports it into GraphDB, and answers natural-language questions
+by generating SPARQL with an LLM.
 
----
+The application runtime uses Python and Docker Desktop.
 
-## Project Structure
+## Runtime Flow
 
 ```text
-data/raw/species.csv          # Local Trefle dataset input (ignored by git)
-data/shop/inventory.csv       # Generated mock shop inventory (ignored by git)
-data/plantms.db               # Generated SQLite database (ignored by git)
-scripts/generate_ontology.py  # Step 1: generates the OWL2 TBox
-scripts/apply_oops_fixes.py   # Step 3: applies OOPS follow-up fixes
-scripts/generate_shop_data.py # Step 2 prep: generates the mock shop inventory CSV
-scripts/load_database.py      # Step 2 prep: loads both CSVs into normalized SQLite
-ontology/plant_management.ttl # Generated OWL2 ontology (TBox + named individuals)
-ontology/plant_management.rdf # Generated RDF/XML export of the ontology
-ontology/plant_management_oops_fixed.ttl # Step 3: OOPS-fixed ontology
-ontology/plant_management_oops_fixed.rdf # Step 3: OOPS-fixed RDF/XML export
-ontology/README.md            # Full ontology schema documentation
-plant_management_r2rml.ttl    # Step 2: R2RML mappings for Ontop / GraphDB
-plant_management_shapes.ttl   # Step 3: SHACL rules for KG validation
-plant_management_po_alignment.ttl # Step 4: Plant Ontology alignment
-report.tex                    # Technical project report
-OOPS_FINDINGS.md              # Step 3: original OOPS findings
-OOPS_FIXES.md                 # Step 3: fixes applied after OOPS scan
-requirements.txt             # Python dependencies
+Natural-language question
+  -> retrieve relevant ontology terms from the local OWL ontology
+  -> retrieve matching labeled entities from GraphDB
+  -> ask the configured LLM to generate a read-only SPARQL SELECT query
+  -> validate and execute the query against GraphDB
+  -> ask the LLM to answer only from the returned rows
 ```
 
----
+The knowledge graph stays in GraphDB. There is no vector database, embedding
+index, local-TTL query mode, or template fallback.
 
-## Assignment Status
+## Prerequisites
 
-| Step | Status | Notes |
-| --- | --- | --- |
-| Step 1: Ontology engineering | Done | Base ontology has more than 30 classes and 25 properties, OWL2 features, and ODPs. |
-| Step 2: OBDA KG creation | Partly done | R2RML mappings and generation scripts exist. Local CSV/DB artifacts are ignored by git. GraphDB materialized KG export is still open. |
-| Step 3: Verification | Partly done | OOPS scan, OOPS fixes, and SHACL rules exist. SHACL validation report is still open. |
-| Step 4: Alignment | First stage done | Plant Ontology was selected and a manual alignment artifact exists. Tool-based Alignment API result is still open if required. |
-| Step 5: RAG application | Done | Source code and usage documentation created. |
+- Python 3.12 or newer
+- Docker Desktop with Linux containers enabled
+- An OpenAI API key, or a local [Ollama](https://ollama.com/) installation
+- `data/plantms_full_kg.ttl` for the initial GraphDB import
 
----
+The generated full KG is approximately 1.9 GB and is intentionally ignored by
+git.
 
-## Step 1 - Generate the OWL2 Ontology (TBox)
+## Quick Start
 
-```bash
-python3 scripts/generate_ontology.py
+### 1. Install Python dependencies
+
+PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-This writes `ontology/plant_management.ttl` and prints a summary of the generated
-classes, properties, and named individuals.
-
-See [ontology/README.md](ontology/README.md) for the full schema documentation
-(class hierarchy, properties, OWL2 features, ODPs, competency questions).
-
-## Step 2 prep - Generate Mock Shop Inventory
+macOS or Linux:
 
 ```bash
-python3 scripts/generate_shop_data.py
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-This reads `data/raw/species.csv`, selects ~100 Vienna-appropriate species across 12
-plant families, and writes `data/shop/inventory.csv` with realistic shop attributes
-(price, stock quantity, shelf date, care level, temperature category).
+### 2. Configure the LLM
 
-The CSV is the second data source for Step 2 OBDA. During loading, its Trefle ids are
-linked to the normalized `plant` table so shop competency questions stay easy to map.
+For OpenAI, create the ignored local `.env` file:
 
----
+```powershell
+Copy-Item .env.example .env
+```
 
-## Step 2 - R2RML / Ontop Mapping
+Set your key in `.env`:
 
-The R2RML mapping file is:
+```dotenv
+LLM_PROVIDER=openai
+OPENAI_API_KEY=replace-me
+OPENAI_MODEL=gpt-5-mini
+OPENAI_API_BASE=https://api.openai.com
+```
+
+The query CLI loads `.env` automatically. `gpt-5-mini` is the default OpenAI
+model because SPARQL generation benefits from a capable model while remaining
+inexpensive.
+
+For a local Ollama setup:
 
 ```bash
+ollama pull llama3
+```
+
+Then use `--provider ollama` when running queries.
+
+### 3. Start GraphDB
+
+```bash
+docker compose up -d
+```
+
+Open [http://localhost:7200](http://localhost:7200).
+
+The Compose service:
+
+- runs the pinned image `ontotext/graphdb:10.8.14`
+- persists repository data in a Docker volume
+- exposes `./data` as GraphDB's read-only server import directory
+- publishes Workbench on `http://localhost:7200`
+
+### 4. Import the KG once
+
+Skip this section if repository `plantms` already exists and contains the data.
+
+In GraphDB Workbench:
+
+1. Open `Setup -> Repositories`.
+2. Create a repository named `plantms` with the default settings.
+3. Open `Import`.
+4. Upload `ontology/plant_management_oops_fixed.ttl` from `User data`.
+5. Import `plantms_full_kg.ttl` from `Server files`.
+6. Wait for the full KG import to finish.
+
+The server-file import is important because the KG is too large for a browser
+upload. On the tested machine the full import took approximately 10 minutes.
+
+Verified local repository counts:
+
+| Measure | Value |
+| --- | ---: |
+| Explicit statements | 11,105,948 |
+| Inferred statements | 6,977,509 |
+| Total statements | 18,083,457 |
+| `plant:Plant` instances | 416,473 |
+| `plant:ShopProduct` instances | 95 |
+
+### 5. Ask a question
+
+OpenAI:
+
+```bash
+python scripts/rag_query.py --provider openai --show-plan --query "What is the total stock of all Araceae plants in the shop?"
+```
+
+Expected grounded answer:
+
+```text
+The total stock of all Araceae plants in the shop is 88.
+```
+
+Interactive mode:
+
+```bash
+python scripts/rag_query.py --provider openai
+```
+
+Run all demo questions:
+
+```bash
+python scripts/rag_query.py --provider openai --demo
+```
+
+Use Ollama instead:
+
+```bash
+python scripts/rag_query.py --provider ollama --query "Which plants have blue flowers?"
+```
+
+## Rebuild the Data and KG
+
+The normal query workflow only requires GraphDB to be running. Use this section
+when regenerating artifacts from source.
+
+### 1. Provide the Trefle input
+
+Place the Trefle export at:
+
+```text
+data/raw/species.csv
+```
+
+### 2. Generate the ontology
+
+```bash
+python scripts/generate_ontology.py
+python scripts/apply_oops_fixes.py
+```
+
+Generated ontology artifacts:
+
+```text
+ontology/plant_management.ttl
+ontology/plant_management.rdf
+ontology/plant_management_oops_fixed.ttl
+ontology/plant_management_oops_fixed.rdf
+```
+
+### 3. Generate the mock shop data and SQLite database
+
+```bash
+python scripts/generate_shop_data.py
+python scripts/load_database.py
+```
+
+Generated data artifacts:
+
+```text
+data/shop/inventory.csv
+data/plantms.db
+```
+
+Current SQLite counts:
+
+| Table | Rows |
+| --- | ---: |
+| `plant` | 416,473 |
+| `family` | 580 |
+| `genus` | 15,540 |
+| `plant_distribution` | 1,306,113 |
+| `shop_product` | 95 |
+
+### 4. Materialize the full RDF knowledge graph
+
+The tested materialization command is:
+
+```bash
+python scripts/materialize_full_kg.py
+```
+
+It writes:
+
+```text
+data/plantms_full_kg.ttl
+```
+
+The generated KG currently contains `11,104,833` RDF triples before GraphDB
+inference.
+
+## R2RML and Ontop
+
+The course OBDA artifact is:
+
+```text
 plant_management_r2rml.ttl
 ```
 
-It maps:
-- `plant` rows to `plant:Plant` individuals
-- taxonomy dimension rows to `plant:Family` and `plant:Genus`
-- normalized link tables such as `plant_common_name`, `plant_synonym`,
-  `plant_bloom_month`, `plant_distribution`, and component/color tables
-- `shop_product` rows to `plant:ShopProduct`
+It maps normalized SQLite tables to the ontology, including plants, taxonomy,
+multi-valued trait relations, distributions, plant parts, colors, and shop
+products.
 
-The database is normalized for OBDA: multi-valued CSV fields are materialized into relation
-tables during loading, so the R2RML file mostly uses direct table scans and small lookup joins
-instead of recursive string-splitting SQL.
-
----
-
-## Step 2 prep - Load SQLite Database
-
-```bash
-python3 scripts/load_database.py
-```
-
-This reads both CSVs and creates `data/plantms.db` - the SQLite database used by Ontop for
-OBDA. All Trefle species are loaded into a normalized schema so the ontology also serves as a
-general plant encyclopedia without pushing cleanup logic into the mapping layer.
-
-Example summary from the current dataset:
+The Ontop configuration is:
 
 ```text
-Database: data/plantms.db
-  plant                : 416,473 rows
-  family               : 580 rows
-  genus                : 15,540 rows
-  plant_distribution   : 1,306,113 rows
-  shop_product         : 95 rows
-  shop <> plant joins  : 95 rows matched
+config/ontop.properties
 ```
 
-Core tables:
-- `plant` - one row per Trefle species with scalar attributes only
-- `family`, `genus`, `region`, `month_dim`, and enum dimensions for growth form/rate,
-  habits, edible parts, care levels, temperature categories, foliage textures, and colors
-- link tables such as `plant_common_name`, `plant_synonym`, `plant_growth_habit`,
-  `plant_bloom_month`, `plant_distribution`, `plant_edible_part`, and component/color tables
-- `shop_product` - normalized shop inventory linked by FK `plant_id -> plant.plant_id`
-
-Uses only Python stdlib (`csv`, `sqlite3`, `pathlib`, `time`, `re`) - no extra dependencies.
-
-The large CSV and SQLite files are not tracked in git. Keep the Trefle export at
-`data/raw/species.csv` locally, then regenerate `data/shop/inventory.csv` and
-`data/plantms.db` with the commands above.
-
----
-
-## Step 3 first stage - Apply OOPS Fixes
+The intended Ontop command is:
 
 ```bash
-python3 scripts/apply_oops_fixes.py
+ontop materialize \
+  -m plant_management_r2rml.ttl \
+  -t ontology/plant_management_oops_fixed.ttl \
+  -p config/ontop.properties \
+  -f turtle \
+  -o data/plantms_full_kg.ttl
 ```
 
-This reads `ontology/plant_management.ttl` and writes separate OOPS-fixed
-artifacts:
-- `ontology/plant_management_oops_fixed.ttl`
-- `ontology/plant_management_oops_fixed.rdf`
+Ontop 5.4.0 was tested with the SQLite JDBC driver, but its generated SQL failed
+against SQLite near `UNION` for predicates produced by multiple triples maps.
+The direct materializer is retained as the working full-KG generation path. It
+follows the same normalized database structure and RDF predicate structure.
 
-The original scan notes stay in `OOPS_FINDINGS.md`; the fix summary is in
-`OOPS_FIXES.md`.
+## Verification Artifacts
 
-## Step 3 second stage - SHACL Rules
+### OOPS
 
-```bash
+The original OOPS scan and follow-up notes are stored in:
+
+```text
+data/oops_scan/
+OOPS_FINDINGS.md
+OOPS_FIXES.md
+```
+
+### SHACL
+
+The SHACL rules are stored in:
+
+```text
 plant_management_shapes.ttl
 ```
 
-The SHACL rules validate plant identity, taxonomy, numeric ranges, months and
-seasons, plant parts, distributions, and shop products. Validation reports
-should be stored as `plant_management_validation_report.ttl` after running a SHACL engine such as
-TopBraid SHACL or SHACL4Protege.
+Manual submission step: run validation with the TopBraid SHACL engine using:
 
-The rules are meant to run on the materialized Step 2 knowledge graph,
-preferably together with the OOPS-fixed ontology:
+- data graph: `data/plantms_full_kg.ttl`
+- additional data graph: `ontology/plant_management_oops_fixed.ttl`
+- shapes graph: `plant_management_shapes.ttl`
 
-```bash
-ontology/plant_management_oops_fixed.ttl
-```
+Export the final Turtle report as:
 
-The rules follow the current data state. For example, plant genus and family
-links are checked when present, but they are not mandatory because some Trefle
-rows do not contain taxonomy ids.
-
-Expected future report artifact:
-
-```bash
+```text
 plant_management_validation_report.ttl
 ```
 
-## Step 4 first stage - Ontology Alignment
+The checked-in report is provisional until it is replaced with the TopBraid
+export.
 
-The selected external ontology is the Plant Ontology (PO):
+### Alignment
 
-```bash
-http://purl.obolibrary.org/obo/po.owl
-```
+The first-stage Plant Ontology alignment is:
 
-PO was selected because it is focused on plant anatomy, morphology, and plant
-development. This matches the strongest part of the local ontology: plant parts
-such as flower, fruit, root, foliage, and general plant structure.
-
-The first alignment artifact is:
-
-```bash
+```text
 plant_management_po_alignment.ttl
 ```
 
-The alignment is manual and conservative:
+## Smoke Checks
 
-- `owl:equivalentClass` is used only when the local class and PO class have the same meaning.
-- `rdfs:subClassOf` is used when the local class is clearly narrower.
-- `skos:closeMatch` is used when the concepts are related but not exactly the same.
-- `plant:Plant` is not mapped to PO `whole plant`, because the local class represents a species/data record and not one physical organism.
+Run these in GraphDB Workbench under `SPARQL`:
 
-Candidate overview:
+```sparql
+PREFIX plant: <http://www.semanticweb.org/plantms/ontology#>
 
-| Ontology | Fit | Reason |
-| --- | --- | --- |
-| Plant Ontology (PO) | Best | Direct match for plant structures and development stages. |
-| Plant Trait Ontology (TO) | Good | Useful for traits, but local traits are mostly modeled as properties and values. |
-| AGROVOC | Medium | Broad agriculture thesaurus, but less precise for OWL class alignment. |
-| Crop Ontology (CO) | Medium-low | Strong for crop breeding variables, but the project covers many plant types. |
-| ENVO | Medium-low | Useful for environment and habitat, but not the main project focus. |
-| NCBI Taxonomy | Low for now | Useful for taxa, but the data does not contain NCBI taxon ids. |
-
-## Step 5: RAG Application
-
-### Architecture
-
-The RAG application answers natural-language questions strictly from three
-indexed knowledge sources. No external plant knowledge is used.
-
-| Phase | Component | Detail |
-|---|---|---|
-| **Indexing** | TTL parser | rdflib; one chunk per class, property, individual group, plus 5 hand-crafted ODP/schema summary chunks |
-| | README parser | regex split on `##` headings; one chunk per section |
-| | CSV parser | pandas; one chunk per shop product row |
-| **Retrieval** | Embedder | `sentence-transformers/all-MiniLM-L6-v2` (384-dim, unit-normalised cosine similarity) |
-| | Top-K | 8 chunks per query (configurable via `--top-k`) |
-| **Generation** | LLM | Llama 3 running locally via Ollama + LangChain |
-| | Grounding | System prompt enforces strict "answer only from context" policy |
-
-### Index Statistics (`rag/meta.json`)
-
-| Source | Chunks |
-|---|---|
-| `ontology_class` | 37 |
-| `ontology_property` | 81 |
-| `ontology_individual` | 16 |
-| `ontology_odp` | 5 |
-| `ontology_header` | 1 |
-| `readme` | 11 |
-| `shop_inventory` | 95 |
-| **Total** | **246** |
-
-## Report
-
-The report source is:
-
-```bash
-report.tex
+SELECT (COUNT(?plant) AS ?plants) WHERE {
+  ?plant a plant:Plant .
+}
 ```
 
-Build it with:
+```sparql
+PREFIX plant: <http://www.semanticweb.org/plantms/ontology#>
+
+SELECT (COUNT(?product) AS ?products) WHERE {
+  ?product a plant:ShopProduct .
+}
+```
+
+Run the Python regression suite:
 
 ```bash
-pdflatex report.tex
+python -m unittest tests.test_rag_query -v
 ```
+
+## Important Files
+
+```text
+compose.yaml                         GraphDB Docker service
+.env.example                         Local LLM configuration template
+flake.nix                            Optional Nix development shell
+scripts/rag_query.py                  GraphDB-backed natural-language query CLI
+scripts/materialize_full_kg.py        Working full-KG materializer
+scripts/generate_ontology.py          Base ontology generator
+scripts/apply_oops_fixes.py           OOPS follow-up fixes
+scripts/generate_shop_data.py         Mock inventory generator
+scripts/load_database.py              SQLite loader
+plant_management_r2rml.ttl            R2RML OBDA mapping
+plant_management_shapes.ttl           SHACL rules
+plant_management_po_alignment.ttl     Plant Ontology alignment
+ontology/README.md                    Ontology schema documentation
+report.tex                            Technical report source
+```
+
+## Optional Developer Convenience
+
+The checked-in `.envrc` only loads `.env` for users who already use direnv.
+Direnv is optional and is not part of the required workflow.
+
+An optional Nix development shell is also available:
+
+```bash
+nix develop
+```
+
+The flake provides Python, SQLite, Java, the SQLite JDBC driver, TeX, and basic
+utilities for artifact generation. It is not used by the normal Python and
+Docker workflow. It intentionally excludes the removed vector-search
+dependencies.

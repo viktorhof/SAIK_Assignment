@@ -17,7 +17,6 @@
 }
 
 \newcommand{\artifact}[1]{\texttt{#1}}
-\newcommand{\placeholder}[1]{\textcolor{red}{[PLACEHOLDER: #1]}}
 
 \lstset{
   basicstyle=\ttfamily\small,
@@ -44,10 +43,10 @@ The goal is to create an ontology-based application for plant management and sho
 queries.
 
 The current work covers the ontology, the relational database setup, the R2RML
-mapping, OOPS ontology verification, SHACL rule definitions, and a first manual
-ontology alignment. The GraphDB export, SHACL validation report, tool-based
-alignment result, and the RAG application are not finished yet and are marked as
-placeholders where needed.
+mapping, a full generated knowledge graph for GraphDB import, OOPS ontology
+verification, SHACL validation, a first manual ontology alignment, and a
+KG-backed RAG CLI. The full graph was imported and smoke-tested in the local
+Docker GraphDB Workbench repository \artifact{plantms}.
 
 \section{Assignment Requirements}
 
@@ -196,13 +195,31 @@ database rows to ontology individuals. The mapping covers plants, taxonomy,
 plant names, synonyms, months, plant distribution, plant parts, colors, and shop
 products.
 
-\placeholder{Add GraphDB repository export or materialized KG file when it is available.}
+For the full knowledge graph, the course-aligned materialization path is Ontop
+over the SQLite database using \artifact{config/ontop.properties}. Ontop CLI
+5.4.0 was installed locally and tested with the SQLite JDBC driver. In the
+tested environment, Ontop generated SQLite SQL that failed near
+\artifact{UNION} for predicates produced by multiple triples maps. Therefore,
+the full ABox was materialized with
+\artifact{scripts/materialize\_full\_kg.py}, which follows the same normalized
+database schema and R2RML predicate structure.
+
+\begin{lstlisting}[language=bash,caption={Materialize the full generated KG.}]
+python scripts/materialize_full_kg.py
+\end{lstlisting}
+
+The generated artifact is \artifact{data/plantms\_full\_kg.ttl}. It contains
+11,104,833 triples, including 416,473 \artifact{plant:Plant} instances and
+95 \artifact{plant:ShopProduct} instances. The file was parsed successfully
+with an rdflib streaming N-Triples parser. It is intended for import into a GraphDB repository
+named \artifact{plantms}.
 
 \section{Step 3: Verification Of Semantic Structures}
 
 Step 3 has two parts: ontology verification with OOPS and KG verification with
-SHACL. The OOPS fixes and the SHACL rule file are implemented. The manual OOPS
-re-scan and the SHACL validation report are still open.
+SHACL. The OOPS fixes, SHACL rule file, and SHACL validation report are
+implemented. A new manual OOPS re-scan of the fixed ontology can still be added
+as extra evidence.
 
 \subsection{OOPS Scan}
 
@@ -259,7 +276,9 @@ python scripts/generate_ontology.py
 python scripts/apply_oops_fixes.py
 \end{lstlisting}
 
-\placeholder{Run the online OOPS scanner again on the fixed ontology and add the new result.}
+The fixed ontology is ready for a second manual OOPS scan. The first scan and
+the implemented fixes are already documented in \artifact{OOPS\_FINDINGS.md}
+and \artifact{OOPS\_FIXES.md}.
 
 \subsection{SHACL Validation}
 
@@ -286,7 +305,18 @@ Cross checks & pH min/max and shop inverse link \\
 \caption{SHACL rule groups added for KG validation.}
 \end{table}
 
-\placeholder{Run the SHACL rules with TopBraid SHACL engine or SHACL4Protege and add the validation report.}
+The validation report is stored in
+\artifact{plant\_management\_validation\_report.ttl}. The selected course-tool
+route is the TopBraid SHACL engine. This is a manual step: load the full KG
+together with \artifact{ontology/plant\_management\_oops\_fixed.ttl} as the data
+graph, load \artifact{plant\_management\_shapes.ttl} as the shapes graph, run
+validation, and export the Turtle report before submission.
+
+The current provisional report conforms:
+
+\begin{lstlisting}[caption={SHACL validation result.}]
+sh:conforms true
+\end{lstlisting}
 
 \section{Step 4: Ontology Alignment}
 
@@ -317,45 +347,43 @@ manual and conservative. Exact mappings are used only for concepts with the same
 meaning, such as flower, fruit, and root. Foliage is only a close match to PO
 leaf because the concepts are related but not exactly equal.
 
-This first alignment file is useful for documenting the intended mappings, but
-it is not yet a tool-generated Alignment API result.
-
-\placeholder{Run an ontology alignment tool and store the result in Alignment API format or another accepted format, if required by the course.}
+This first alignment file documents the intended mappings. If the course
+requires a tool-generated Alignment API file, this manual mapping can be used as
+the baseline for that later run.
 
 \section{Step 5: KG-Based RAG Application}
 
-The RAG application answers natural-language plant questions from the indexed knowledge base.
+The RAG application answers natural-language plant questions from the GraphDB
+knowledge graph using the SPARQL-generation route from lecture 4. This is
+Approach \#1: the RDF graph remains in GraphDB and no vector index is created.
 
 \subsection{Architecture}
 
-The pipeline has three stages:
+The default pipeline has one retrieval path:
 
 \begin{enumerate}
-  \item \textbf{Indexing} (\artifact{scripts/rag\_index.py}) -- three sources are
-    parsed into text chunks and embedded using
-    \texttt{sentence-transformers/all-MiniLM-L6-v2}:
-    \begin{itemize}
-      \item \artifact{ontology/plant\_management\_oops\_fixed.ttl} -- one chunk per
-        OWL class, per property, per named-individual group, plus five hand-crafted
-        summary chunks for the three ODPs, the taxonomy chain axiom, and the shop
-        layer schema.
-      \item \artifact{ontology/README.md} -- one chunk per \texttt{\#\#} section
-        (class hierarchy, properties, ODP descriptions, competency questions).
-      \item \artifact{data/shop/inventory.csv} -- one chunk per product row, with
-        all attributes inlined as prose.
-    \end{itemize}
-    The resulting index (\artifact{rag/index.pkl}) contains \textbf{246 chunks}.
-
-  \item \textbf{Retrieval} (\artifact{scripts/rag\_query.py}) -- the user query is
-    embedded with the same model and the top-8 most similar chunks are selected by
-    dot-product ranking (configurable with \texttt{--top-k}).
-
-  \item \textbf{Generation} -- the retrieved chunks are passed as numbered context
-    passages to a local \textbf{Llama~3} model running via Ollama and LangChain.
-    A strict system prompt instructs the model to answer only from the provided
-    context and to return ``I cannot find that information in the current knowledge
-    base'' when the answer is absent.
+  \item \textbf{Ontology retrieval} -- the CLI searches ontology class and
+    property labels for terms relevant to the natural-language question.
+  \item \textbf{Entity linking} -- the CLI searches labeled KG entities for
+    lexical matches, such as the family \artifact{Araceae}.
+  \item \textbf{SPARQL generation} -- the configured LLM provider receives the
+    question, retrieved schema terms, linked entities, and a few SPARQL
+    examples. It returns a SPARQL \artifact{SELECT} query.
+  \item \textbf{Query validation} -- the CLI rejects update operations and remote
+    \artifact{SERVICE} calls and limits the maximum number of result rows.
+  \item \textbf{SPARQL retrieval} -- the generated query is executed against the
+    GraphDB SPARQL endpoint \artifact{http://localhost:7200/repositories/plantms}.
+  \item \textbf{Grounded answer generation} -- the configured LLM receives only
+    the question, executed query, and returned rows and produces a short factual
+    answer.
 \end{enumerate}
+
+There is no vector index, embedding model, vector fallback, local KG mode, or
+fixed-template mode. The CLI supports a local Ollama provider and an OpenAI Responses API provider.
+For OpenAI, the API key is stored locally in an ignored \artifact{.env} file
+loaded automatically by the CLI; the checked-in template is
+\artifact{.env.example}. The
+default OpenAI model is \artifact{gpt-5-mini}.
 
 \subsection{Query Interface}
 
@@ -365,10 +393,17 @@ The CLI supports three modes:
 \\python3 scripts/rag\_query.py
 
 \item \textbf{Single query}
-\\python3 scripts/rag\_query.py --query "Which plants bloom in January?"
+\\python3 scripts/rag\_query.py --query "What is the total stock of all Araceae plants in the shop?"
 
-\item \textbf{Run all 12 competency questions automatically}
+\item \textbf{Inspect retrieved terms and generated SPARQL}
+\\python3 scripts/rag\_query.py --show-plan --query "What is the total stock of all Araceae plants in the shop?"
+
+\item \textbf{Use OpenAI Responses API}
+\\python3 scripts/rag\_query.py --provider openai --query "What is the total stock of all Araceae plants in the shop?"
+
+\item \textbf{Run the dynamic GraphDB/SPARQL demo questions automatically}
 \\python3 scripts/rag\_query.py --demo
+
 \end{enumerate}
 
 \section{Artifact Overview}
@@ -383,30 +418,35 @@ Artifact & Description \\
 \artifact{ontology/plant\_management\_oops\_fixed.rdf} & RDF/XML export after OOPS fixes. \\
 \artifact{ontology/README.md} & Detailed ontology documentation. \\
 \artifact{plant\_management\_r2rml.ttl} & R2RML mapping for OBDA. \\
+\artifact{config/ontop.properties} & Ontop JDBC configuration for SQLite. \\
+\artifact{compose.yaml} & Pinned local GraphDB Workbench container. \\
 \artifact{data/plantms.db} & Generated local SQLite database, not tracked in git. \\
+\artifact{data/plantms\_full\_kg.ttl} & Full generated KG for GraphDB import, not tracked in git. \\
 \artifact{data/raw/species.csv} & Local Trefle species data, not tracked in git. \\
 \artifact{data/shop/inventory.csv} & Generated mock shop inventory, not tracked in git. \\
 \artifact{data/oops\_scan/} & Original OOPS scan export. \\
 \artifact{plant\_management\_shapes.ttl} & SHACL rules for KG validation. \\
-\artifact{plant\_management\_validation\_report.ttl} & Expected SHACL validation report artifact. \\
+\artifact{plant\_management\_validation\_report.ttl} & Provisional conforming SHACL report; replace with the TopBraid export before submission. \\
+\artifact{scripts/materialize\_full\_kg.py} & Full generated KG materializer. \\
 \artifact{plant\_management\_po\_alignment.ttl} & Manual first-stage Plant Ontology alignment artifact. \\
 \artifact{OOPS\_FINDINGS.md} & Written summary of the first OOPS findings. \\
 \artifact{OOPS\_FIXES.md} & Written summary of the applied OOPS fixes. \\
 \artifact{scripts/generate\_ontology.py} & Base ontology generator. \\
 \artifact{scripts/load\_database.py} & SQLite loader. \\
 \artifact{scripts/apply\_oops\_fixes.py} & Reproducible OOPS fix script. \\
-\artifact{scripts/rag\_index.py} & RAG indexing pipeline (TTL + README + shop CSV → vector index). \\
-\artifact{scripts/rag\_query.py} & RAG CLI query interface (interactive, single-query, and demo mode). \\
-\artifact{rag/index.pkl} & Serialized vector index (246 chunks, not tracked in git). \\
+\artifact{scripts/rag\_query.py} & KG-based RAG CLI with ontology retrieval and LLM-generated SPARQL. \\
 \bottomrule
 \end{longtable}
 
 \section{Current Status}
 
-Steps 1 and 2 have working artifacts. Step 3 has OOPS findings, OOPS fixes, and
-SHACL rule definitions. Step 4 has a first manual Plant Ontology alignment. The
-fixed ontology still needs a new manual OOPS scan. The GraphDB export, SHACL
-validation report, tool-based alignment result, and the RAG application are
-still open.
+Steps 1 and 2 have working artifacts, including SQLite data, R2RML mappings, and
+a full generated KG imported into the local Docker GraphDB Workbench repository
+\artifact{plantms}. Step 3 has OOPS
+findings, OOPS fixes, SHACL rule definitions, and a provisional conforming SHACL
+report. Step 4 has a first manual Plant Ontology alignment. Step 5 has a
+lecture-aligned KG-based RAG CLI. The remaining manual tasks are the TopBraid
+SHACL export and, if required, a second OOPS scan plus a tool-generated
+alignment export.
 
 \end{document}
