@@ -70,14 +70,23 @@ def split_csv_values(value):
     return [part.strip() for part in text.split(",") if part.strip()]
 
 
+_MONTH_ABBR = {
+    "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+    "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+}
+
 def split_month_values(value):
     text = to_text(value)
     if text is None:
         return []
 
     months = []
-    for part in text.split():
+    for part in text.replace(",", " ").split():
+        part = part.strip().lower()
+        # Try numeric first, then abbreviation
         month_number = to_int(part)
+        if month_number is None:
+            month_number = _MONTH_ABBR.get(part[:3])
         if month_number is None:
             continue
         if month_number < 1 or month_number > 12:

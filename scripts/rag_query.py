@@ -10,6 +10,7 @@ returned rows. There is no vector index or embedding search.
 """
 
 import argparse
+import datetime
 import json
 import os
 from pathlib import Path
@@ -64,7 +65,7 @@ DEMO_QUERIES = [
     "What easy-care climbing plants cost under EUR 30?",
     "Which shop products require warm temperature and have been on the shelf for a long time?",
     "Which low-light plants tolerate high soil salinity?",
-    "Which plants are edible and have edible leaves and roots?",
+    "Which plants are edible and have edible leaves?",
     "Which plants have blue flowers?",
     "Which plants grow in poor soil?",
     "Which plants bloom in January?",
@@ -88,7 +89,9 @@ TERM_ALIASES = {
     "easy-care": ["easy", "care level"],
     "family": ["belongs to family"],
     "height": ["maximum height"],
+    "long": ["shelf", "date"],
     "old": ["shelf date"],
+    "poor": ["nutriments", "soil"],
     "salinity": ["soil salinity"],
     "stock": ["stock quantity"],
     "warm": ["temperature category"],
@@ -122,14 +125,58 @@ SELECT ?scientificName WHERE {
 }
 LIMIT 50
 
-Question: What is the maximum height of Pinaceae plants?
+Question: Which plants belong to family Pinaceae?
 SPARQL:
-SELECT (MAX(?height) AS ?maximumHeightCm) WHERE {
+SELECT ?scientificName WHERE {
   ?plant a plant:Plant ;
-         plant:hasMaximumHeightCm ?height ;
+         plant:hasScientificName ?scientificName ;
          plant:belongsToFamily ?family .
   ?family rdfs:label "Pinaceae" .
 }
+ORDER BY ?scientificName
+
+Question: What is the maximum height of Pinaceae plants?
+SPARQL:
+SELECT ?scientificName ?maximumHeightCm WHERE {
+  ?plant a plant:Plant ;
+         plant:hasScientificName ?scientificName ;
+         plant:hasMaximumHeightCm ?maximumHeightCm ;
+         plant:belongsToFamily ?family .
+  ?family rdfs:label "Pinaceae" .
+}
+ORDER BY DESC(?maximumHeightCm)
+LIMIT 1
+
+Question: Which plants are edible and have edible leaves?
+SPARQL:
+SELECT ?scientificName WHERE {
+  ?plant a plant:Plant ;
+         plant:hasScientificName ?scientificName ;
+         plant:isEdible "1"^^xsd:boolean ;
+         plant:hasEdiblePart plant:LeafPart .
+}
+ORDER BY ?scientificName
+
+Question: Which plants grow in poor soil?
+SPARQL:
+SELECT ?scientificName ?soilNutriments WHERE {
+  ?plant a plant:Plant ;
+         plant:hasScientificName ?scientificName ;
+         plant:hasSoilNutriments ?soilNutriments .
+  FILTER(?soilNutriments <= 2)
+}
+ORDER BY ?soilNutriments
+
+Question: Which shop products require warm temperature and have been on the shelf for a long time?
+SPARQL:
+SELECT ?productName ?shelfDate WHERE {
+  ?product a plant:ShopProduct ;
+           plant:hasProductName ?productName ;
+           plant:hasTemperatureCategory plant:WarmCategory ;
+           plant:hasShelfDate ?shelfDate .
+  FILTER(?shelfDate < "2026-03-01"^^xsd:date)
+}
+ORDER BY ?shelfDate
 """
 
 
@@ -513,12 +560,23 @@ def validate_read_only_sparql(sparql, ontology_graph=None):
 
 
 def planner_prompt(question, schema_terms, entity_candidates):
+    today = datetime.date.today().isoformat()
+    three_months_ago = (datetime.date.today() - datetime.timedelta(days=90)).isoformat()
     return f"""
 You construct a read-only SPARQL SELECT query for a plant-management RDF graph.
 Use only the supplied ontology vocabulary and exact entity URIs or labels.
 Do not invent classes, properties, or entity identifiers.
 Do not use SERVICE, updates, or markdown fences.
 Return JSON with exactly two strings: "sparql" and "reason".
+
+Rules:
+- When listing individual plants, always SELECT ?scientificName instead of ?plant (never return raw URIs).
+- For pure aggregate queries (COUNT, SUM) that produce a single summary number, do NOT add ?scientificName — it would create invalid SPARQL without GROUP BY.
+- For MAX/MIN queries that should identify which plant, use ORDER BY DESC/ASC + LIMIT 1 and include ?scientificName alongside the value variable.
+- isEdible is stored as "1"^^xsd:boolean (true) or "0"^^xsd:boolean (false).
+
+Current date: {today}
+Three months ago: {three_months_ago}
 
 Prefixes:
 {PREFIXES.strip()}
@@ -582,7 +640,7 @@ def answer_with_llm(endpoint, ontology_graph, question, provider, ollama_url, op
     if plan_only:
         return ""
 
-    rows = run_sparql(endpoint, sparql)
+    rows = run_sparql(endpoint, PREFIXES + sparql)
     return call_llm(
         answer_prompt(question, sparql, rows),
         provider,

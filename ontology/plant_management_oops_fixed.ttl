@@ -1125,18 +1125,18 @@ plant:Plant a owl:Class ;
     rdfs:label "Plant"@en ;
     rdfs:comment "Main entity. One individual per species row in the CSV. All plant-level properties are attached here."@en ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty plant:belongsToFamily ;
+            owl:someValuesFrom plant:Family ],
+        [ a owl:Restriction ;
+            owl:onProperty plant:hasDistribution ;
+            owl:someValuesFrom plant:PlantDistribution ],
+        [ a owl:Restriction ;
             owl:onProperty plant:belongsToGenus ;
             owl:someValuesFrom plant:Genus ],
         [ a owl:Restriction ;
             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
             owl:onClass plant:PlantPart ;
             owl:onProperty plant:hasComponent ],
-        [ a owl:Restriction ;
-            owl:onProperty plant:belongsToFamily ;
-            owl:someValuesFrom plant:Family ],
-        [ a owl:Restriction ;
-            owl:onProperty plant:hasDistribution ;
-            owl:someValuesFrom plant:PlantDistribution ],
         owl:Thing ;
     owl:hasKey ( plant:hasTrefleId ) .
 
