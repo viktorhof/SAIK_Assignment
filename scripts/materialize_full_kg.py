@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """
-Materialize the full Plant Management ABox from the SQLite database.
+Materialize Plant Management KG data from SQLite.
 
-Ontop is the preferred OBDA materializer for the assignment. In this project
-Ontop 5.4.0 currently fails against SQLite when materializing predicates that
-are produced by several triples maps. This script follows the same normalized
-database schema and R2RML predicate choices directly, so the full KG can still
-be generated reproducibly for GraphDB import and SHACL validation.
+LLM use disclaimer: an LLM was used during this exercise; the output was
+reviewed, adapted, and verified by the author.
 """
 
 import sqlite3

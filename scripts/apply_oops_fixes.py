@@ -1,11 +1,8 @@
 """
-Apply the OOPS follow-up fixes to the generated ontology.
+Apply the final ontology cleanup rules.
 
-Input : ontology/plant_management.ttl
-Output: ontology/plant_management_oops_fixed.ttl
-        ontology/plant_management_oops_fixed.rdf
-
-Run after scripts/generate_ontology.py if the base ontology is regenerated.
+LLM use disclaimer: an LLM was used during this exercise; the output was
+reviewed, adapted, and verified by the author.
 """
 
 from pathlib import Path
@@ -21,9 +18,10 @@ PLANT = Namespace("http://www.semanticweb.org/plantms/ontology#")
 DCTERMS = Namespace("http://purl.org/dc/terms/")
 
 
-def add_label_comment(graph, subject, label, comment):
+def add_label_comment(graph, subject, label, comment=None):
     graph.add((subject, RDFS.label, Literal(label, lang="en")))
-    graph.add((subject, RDFS.comment, Literal(comment, lang="en")))
+    if comment:
+        graph.add((subject, RDFS.comment, Literal(comment, lang="en")))
 
 
 def replace_comment(graph, subject, comment):
@@ -42,7 +40,7 @@ def add_object_property(graph, name, domain, range_, label, comment, transitive=
     return uri
 
 
-def add_inverse_property(graph, name, inverse_of, domain, range_, label, comment, transitive=False):
+def add_inverse_property(graph, name, inverse_of, domain, range_, label, comment=None, transitive=False):
     uri = add_object_property(graph, name, domain, range_, label, comment, transitive=transitive)
     graph.add((inverse_of, OWL.inverseOf, uri))
     return uri
@@ -65,10 +63,9 @@ def fix_part_relations(graph):
     replace_comment(
         graph,
         has_part,
-        "Direct part relation between a plant and a structural plant part. "
-        "Supports the Componency ODP without transitive reasoning.",
+        "Direct relation between a plant and a structural plant part.",
     )
-    replace_comment(graph, is_part_of, "Inverse of hasPart.")
+    graph.remove((is_part_of, RDFS.comment, None))
 
 
 def fix_numeric_ranges(graph):
@@ -113,7 +110,6 @@ def add_season_links(graph):
         PLANT.Season,
         PLANT.Month,
         "has month",
-        "Inverse of inSeason.",
     )
 
     month_seasons = {
@@ -138,81 +134,81 @@ def add_season_links(graph):
 def add_useful_inverses(graph):
     add_inverse_property(
         graph, "hasFamilyMember", PLANT.belongsToFamily, PLANT.Family, PLANT.Plant,
-        "has family member", "Inverse of belongsToFamily."
+        "has family member"
     )
     add_inverse_property(
         graph, "hasGenusMember", PLANT.belongsToGenus, PLANT.Genus, PLANT.Plant,
-        "has genus member", "Inverse of belongsToGenus."
+        "has genus member"
     )
     add_inverse_property(
         graph, "hasGenus", PLANT.isSubsumedByFamily, PLANT.Family, PLANT.Genus,
-        "has genus", "Inverse of isSubsumedByFamily."
+        "has genus"
     )
     add_inverse_property(
         graph, "colorOfPart", PLANT.hasColor, PLANT.Color, PLANT.PlantPart,
-        "color of part", "Inverse of hasColor."
+        "color of part"
     )
     add_inverse_property(
         graph, "foliageTextureOf", PLANT.hasFoliageTexture, PLANT.FoliageTexture, PLANT.Foliage,
-        "foliage texture of", "Inverse of hasFoliageTexture."
+        "foliage texture of"
     )
     add_inverse_property(
         graph, "growthHabitOf", PLANT.hasGrowthHabit, PLANT.GrowthHabit, PLANT.Plant,
-        "growth habit of", "Inverse of hasGrowthHabit."
+        "growth habit of"
     )
     add_inverse_property(
         graph, "growthFormOf", PLANT.hasGrowthForm, PLANT.GrowthForm, PLANT.Plant,
-        "growth form of", "Inverse of hasGrowthForm."
+        "growth form of"
     )
     add_inverse_property(
         graph, "growthRateOf", PLANT.hasGrowthRate, PLANT.GrowthRate, PLANT.Plant,
-        "growth rate of", "Inverse of hasGrowthRate."
+        "growth rate of"
     )
     add_inverse_property(
         graph, "isBloomMonthOf", PLANT.bloomsInMonth, PLANT.Month, PLANT.Plant,
-        "is bloom month of", "Inverse of bloomsInMonth."
+        "is bloom month of"
     )
     add_inverse_property(
         graph, "isFruitingMonthOf", PLANT.fruitingInMonth, PLANT.Month, PLANT.Plant,
-        "is fruiting month of", "Inverse of fruitingInMonth."
+        "is fruiting month of"
     )
     add_inverse_property(
         graph, "isGrowthMonthOf", PLANT.growsInMonth, PLANT.Month, PLANT.Plant,
-        "is growth month of", "Inverse of growsInMonth."
+        "is growth month of"
     )
     add_inverse_property(
         graph, "conditionRequiredBy", PLANT.requiresCondition, PLANT.HabitatCondition, PLANT.Plant,
-        "condition required by", "Inverse of requiresCondition."
+        "condition required by"
     )
     add_inverse_property(
         graph, "regionOfDistribution", PLANT.inRegion, PLANT.Region, PLANT.PlantDistribution,
-        "region of distribution", "Inverse of inRegion."
+        "region of distribution"
     )
     add_inverse_property(
         graph, "statusOfDistribution", PLANT.hasDistributionStatus,
         PLANT.DistributionStatus, PLANT.PlantDistribution,
-        "status of distribution", "Inverse of hasDistributionStatus."
+        "status of distribution"
     )
     add_inverse_property(
         graph, "hasSubRegion", PLANT.isSubRegionOf, PLANT.Region, PLANT.Region,
-        "has sub-region", "Inverse of isSubRegionOf.", transitive=True
+        "has sub-region", transitive=True
     )
     add_inverse_property(
         graph, "plantUseOf", PLANT.hasPlantUse, PLANT.PlantUse, PLANT.Plant,
-        "plant use of", "Inverse of hasPlantUse."
+        "plant use of"
     )
     add_inverse_property(
         graph, "ediblePartOf", PLANT.hasEdiblePart, PLANT.EdiblePart, PLANT.Plant,
-        "edible part of", "Inverse of hasEdiblePart."
+        "edible part of"
     )
     add_inverse_property(
         graph, "careLevelOfProduct", PLANT.hasCareLevel, PLANT.CareLevel, PLANT.ShopProduct,
-        "care level of product", "Inverse of hasCareLevel."
+        "care level of product"
     )
     add_inverse_property(
         graph, "temperatureCategoryOfProduct", PLANT.hasTemperatureCategory,
         PLANT.TemperatureCategory, PLANT.ShopProduct,
-        "temperature category of product", "Inverse of hasTemperatureCategory."
+        "temperature category of product"
     )
 
 
@@ -247,8 +243,8 @@ def main():
     datatype_properties = sum(1 for _ in graph.triples((None, RDF.type, OWL.DatatypeProperty)))
     individuals = sum(1 for _ in graph.triples((None, RDF.type, OWL.NamedIndividual)))
 
-    print("OOPS-fixed ontology written to: " + str(OUTPUT_TTL))
-    print("OOPS-fixed RDF/XML written to: " + str(OUTPUT_RDF))
+    print("Cleaned ontology written to: " + str(OUTPUT_TTL))
+    print("Cleaned RDF/XML written to: " + str(OUTPUT_RDF))
     print(f"  Triples            : {len(graph):,}")
     print(f"  Classes            : {classes}")
     print(f"  Object properties  : {object_properties}")

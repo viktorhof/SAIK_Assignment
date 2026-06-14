@@ -1,14 +1,8 @@
 """
-Generate mock shop inventory for "Grüner Daumen" — a small Vienna corner plant shop.
+Generate the Grüner Daumen shop inventory.
 
-Output : data/shop/inventory.csv
-Requires: only Python stdlib (csv, random, datetime)
-Run with: python3 scripts/generate_shop_data.py
-
-The trefle_id column is a FK to species.csv id and is the OBDA join key.
-Care level is derived from Trefle ecological data where available.
-Temperature category is assigned per family (not in Trefle CSV).
-Shelf dates are seeded so some products are >90 days old (needed for CQ11).
+LLM use disclaimer: an LLM was used during this exercise; the output was
+reviewed, adapted, and verified by the author.
 """
 
 import csv
@@ -18,11 +12,7 @@ from pathlib import Path
 
 random.seed(42)
 
-# ---------------------------------------------------------------------------
-# Target genera
-# Fields: genus, family, max_items, product_name, price_min, price_max,
-#         care_override (None = derive from Trefle data), temp_override
-# ---------------------------------------------------------------------------
+# genus, family, max_items, product_name, price_min, price_max, care_override, temperature
 TARGETS = [
     # Araceae — tropical houseplants (Warm)
     ("Monstera",      "Araceae",       3, "Monstera",           18.99, 79.99, None,   "Warm"),
@@ -86,26 +76,18 @@ COL = {
     "atmospheric_humidity": 31, "growth_habit": 21,
 }
 
-# ---------------------------------------------------------------------------
-# Date helpers
-# ---------------------------------------------------------------------------
 START_DATE = date(2025, 10, 1)
 CUT_DATE   = date(2026, 1, 24)   # products on shelf before this are >90 days old
 END_DATE   = date(2026, 4, 15)
 
 def random_old_date():
-    """Return a date before the 90-day cutoff (for CQ11)."""
     span = (CUT_DATE - START_DATE).days
     return START_DATE + timedelta(days=random.randint(0, span))
 
 def random_recent_date():
-    """Return a date after the 90-day cutoff."""
     span = (END_DATE - CUT_DATE).days
     return CUT_DATE + timedelta(days=random.randint(1, span))
 
-# ---------------------------------------------------------------------------
-# Care level derivation from Trefle numeric columns
-# ---------------------------------------------------------------------------
 def derive_care(row, override):
     if override:
         return override
@@ -120,28 +102,21 @@ def derive_care(row, override):
     light = _int("light")
     soil  = _int("soil_nutriments")
     anaer = _int("anaerobic_tolerance")
-    # Hard: low light tolerance OR very anaerobic
     if (light is not None and light < 4) or (anaer is not None and anaer > 6):
         return "Hard"
-    # Easy: good light tolerance AND good soil nutriment tolerance
     if (light is not None and light >= 7) and (soil is not None and soil >= 5):
         return "Easy"
-    # Medium: any data present but not extreme
     if light is not None or soil is not None:
         return "Medium"
-    # No data: default Medium
     return "Medium"
 
-# ---------------------------------------------------------------------------
-# Read species.csv and collect matching rows per genus
-# ---------------------------------------------------------------------------
 CSV_PATH = Path(__file__).parent.parent / "data" / "raw" / "species.csv"
 OUT_DIR  = Path(__file__).parent.parent / "data" / "shop"
 OUT_PATH = OUT_DIR / "inventory.csv"
 
 print("Reading species.csv …")
 target_genera = {t[0] for t in TARGETS}
-genus_rows: dict[str, list] = {g: [] for g in target_genera}
+genus_rows = {g: [] for g in target_genera}
 
 with open(CSV_PATH, newline="", encoding="utf-8") as f:
     reader = csv.reader(f, delimiter="\t")
@@ -159,9 +134,6 @@ missing = target_genera - set(found)
 if missing:
     print(f"  Not found (skipped): {sorted(missing)}")
 
-# ---------------------------------------------------------------------------
-# Build inventory
-# ---------------------------------------------------------------------------
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 FIELDNAMES = [
@@ -172,7 +144,6 @@ FIELDNAMES = [
 inventory = []
 product_id = 1001
 
-# Families that should get old shelf dates to satisfy CQ11
 OLD_DATE_FAMILIES = {"Araceae", "Orchidaceae", "Moraceae", "Strelitziaceae", "Malvaceae"}
 
 for genus, family, max_items, product_name, p_min, p_max, care_override, temp in TARGETS:
@@ -180,7 +151,6 @@ for genus, family, max_items, product_name, p_min, p_max, care_override, temp in
     if not rows:
         continue
 
-    # Shuffle to get variety; take up to max_items
     sample = random.sample(rows, min(max_items, len(rows)))
 
     for i, row in enumerate(sample):
@@ -188,7 +158,6 @@ for genus, family, max_items, product_name, p_min, p_max, care_override, temp in
         scientific    = row[COL["scientific_name"]].strip()
         care          = derive_care(row, care_override)
 
-        # Orchid stock: ensure each line has a decent amount for CQ13
         if family == "Orchidaceae":
             stock = random.randint(3, 8)
         else:
@@ -196,13 +165,11 @@ for genus, family, max_items, product_name, p_min, p_max, care_override, temp in
 
         price = round(random.uniform(p_min, p_max), 2)
 
-        # First item of each warm-family genus gets an old shelf date for CQ11
         if family in OLD_DATE_FAMILIES and i == 0:
             shelf = random_old_date()
         else:
             shelf = random_recent_date()
 
-        # Map care/temp strings to ontology IRI labels used in inventory
         care_iri = {"Easy": "Easy", "Medium": "Medium", "Hard": "Hard"}[care]
         temp_iri = temp  # Warm / Cool / Moderate
 
@@ -219,9 +186,6 @@ for genus, family, max_items, product_name, p_min, p_max, care_override, temp in
         })
         product_id += 1
 
-# ---------------------------------------------------------------------------
-# Write CSV
-# ---------------------------------------------------------------------------
 with open(OUT_PATH, "w", newline="", encoding="utf-8") as f:
     writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
     writer.writeheader()
@@ -230,16 +194,12 @@ with open(OUT_PATH, "w", newline="", encoding="utf-8") as f:
 print(f"\nInventory written to: {OUT_PATH}")
 print(f"  Total rows: {len(inventory)}")
 
-# ---------------------------------------------------------------------------
-# CQ coverage summary
-# ---------------------------------------------------------------------------
 import collections
 
-family_stock: dict[str, int] = collections.defaultdict(int)
+family_stock = collections.defaultdict(int)
 for t in TARGETS:
     genus, family = t[0], t[1]
     for item in inventory:
-        # match by product_name prefix (quick approximation)
         if item["product_name"] == t[3]:
             family_stock[family] += int(item["stock_quantity"])
 

@@ -1,0 +1,1768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:plant="http://www.semanticweb.org/plantms/ontology#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isFruitingMonthOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">is fruiting month of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasAnaerobicTolerance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has anaerobic tolerance</rdfs:label>
+    <rdfs:comment xml:lang="en">Tolerance for anaerobic conditions (0–10).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleSeedsUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Seeds</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#statusOfDistribution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <rdfs:label xml:lang="en">status of distribution</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPlantingRowSpacingCm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has planting row spacing (cm)</rdfs:label>
+    <rdfs:comment xml:lang="en">Recommended row spacing in centimetres.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b43"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Graminoid">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Graminoid</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b75">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Spring"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b76"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasColor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has color</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant part to a color.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#colorOfPart"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b115">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b116"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#MediumTexture">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageTexture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Medium</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasStockQuantity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has stock quantity</rdfs:label>
+    <rdfs:comment xml:lang="en">Number of units currently on the shelf.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b62"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b54">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasMaximumHeightCm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has maximum height (cm)</rdfs:label>
+    <rdfs:comment xml:lang="en">Maximum height in centimetres.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b24"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasImageUrl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has image URL</rdfs:label>
+    <rdfs:comment xml:lang="en">URL of a representative plant image.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageTexture">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Foliage Texture</rdfs:label>
+    <rdfs:comment xml:lang="en">Texture of foliage: fine, medium, or coarse.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasProductId">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:label xml:lang="en">has product ID</rdfs:label>
+    <rdfs:comment xml:lang="en">Unique shop SKU.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isSubRegionOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:label xml:lang="en">is sub-region of</rdfs:label>
+    <rdfs:comment xml:lang="en">Transitive region hierarchy: Country isSubRegionOf Continent.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasSubRegion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ThicketForming">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Thicket Forming</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasSubRegion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <rdfs:label xml:lang="en">has sub-region</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b60">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b58"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b61"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b64">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b63"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b56">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b54"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#WarmCategory">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#TemperatureCategory"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Warm</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Fruit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Fruit</rdfs:label>
+    <rdfs:comment xml:lang="en">Fruit of a plant. Has color, conspicuousness, and fruiting months.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Orange">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Orange</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#RapidGrowthRate">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthRate"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Rapid</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#MediumCare">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#CareLevel"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Medium</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasWikipediaUrl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has Wikipedia URL</rdfs:label>
+    <rdfs:comment xml:lang="en">URL of the Wikipedia article.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#anyURI"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#growthRateOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthRate"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">growth rate of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasShelfDate">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has shelf date</rdfs:label>
+    <rdfs:comment xml:lang="en">Date the product arrived on the shop shelf.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b72">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#SlowGrowthRate"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b73"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Color">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Color</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract superclass for all plant-part color descriptors.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Plant">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Plant</rdfs:label>
+    <rdfs:comment xml:lang="en">Main plant species entity.</rdfs:comment>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b105"/>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b106"/>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b107"/>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b108"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:hasKey rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b109"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has part</rdfs:label>
+    <rdfs:comment xml:lang="en">Direct relation between a plant and a structural plant part.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isPartOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#IntroducedStatus">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Introduced</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isShopProductFor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">is shop product for</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a shop product to its plant species.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isBloomMonthOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">is bloom month of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#SeedPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Seeds</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b41">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b52">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b55"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b74">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#RapidGrowthRate"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b103">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#November"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b104"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasCommonName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has common name</rdfs:label>
+    <rdfs:comment xml:lang="en">Common name(s) of the plant. Multi-valued.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Subshrub">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Subshrub</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#regionOfDistribution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <rdfs:label xml:lang="en">region of distribution</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Brown">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Brown</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#GrowthHabit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Growth Habit</rdfs:label>
+    <rdfs:comment xml:lang="en">Overall growth habit of a plant.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b83"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasFruitConspicuous">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has conspicuous fruit</rdfs:label>
+    <rdfs:comment xml:lang="en">Whether the fruit is conspicuous.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Fruit"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#fruitingInMonth">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">fruiting in month</rdfs:label>
+    <rdfs:comment xml:lang="en">Month when the plant fruits.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isFruitingMonthOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Green">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Green</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#GrowthRate">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Growth Rate</rdfs:label>
+    <rdfs:comment xml:lang="en">Rate of growth: Slow, Moderate, or Rapid.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b72"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleLeavesUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Leaves</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b100">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#August"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b101"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#requiresCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">requires condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant to an ecological condition type.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#conditionRequiredBy"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isGrowthMonthOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">is growth month of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#OrnamentalUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Ornamental Use</rdfs:label>
+    <rdfs:comment xml:lang="en">Plant used for decorative / ornamental purposes.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantUse"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FineTexture">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageTexture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Fine</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#LeafPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Leaves</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isVegetable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">is vegetable</rdfs:label>
+    <rdfs:comment xml:lang="en">True if the plant is classified as a vegetable.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasSoilSalinity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has soil salinity</rdfs:label>
+    <rdfs:comment xml:lang="en">Soil salinity tolerance (0–10).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b57"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPlantingDaysToHarvest">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has planting days to harvest</rdfs:label>
+    <rdfs:comment xml:lang="en">Days from planting to harvest.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b40"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Season">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Season</rdfs:label>
+    <rdfs:comment xml:lang="en">Season of the year: Spring, Summer, Autumn, Winter.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b75"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Country">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Country</rdfs:label>
+    <rdfs:comment xml:lang="en">Country or state-level region.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b99">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#July"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b100"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b108">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+    <owl:onClass rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#hasComponent"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#PlantUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Plant Use</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract superclass for plant use roles.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b42">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b41"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Genus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Genus</rdfs:label>
+    <rdfs:comment xml:lang="en">Taxonomic genus.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#TaxonomicRank"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b121">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Fruit"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b122"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdiblePart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Edible Part</rdfs:label>
+    <rdfs:comment xml:lang="en">The part of a plant that is edible.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b117">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#OrnamentalUse"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasTemperatureCategory">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has temperature category</rdfs:label>
+    <rdfs:comment xml:lang="en">Preferred temperature range for this product (Warm/Cool/Moderate).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#TemperatureCategory"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#temperatureCategoryOfProduct"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#GrowthForm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Growth Form</rdfs:label>
+    <rdfs:comment xml:lang="en">Specific growth form.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Erect">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Erect</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Continent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Continent</rdfs:label>
+    <rdfs:comment xml:lang="en">Top-level geographic region (e.g. Europe, North America).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#February">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">February</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Winter"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasCareLevel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has care level</rdfs:label>
+    <rdfs:comment xml:lang="en">Care difficulty of this shop product (Easy/Medium/Hard).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#CareLevel"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#careLevelOfProduct"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#RootPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Roots</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasEdiblePart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has edible part</rdfs:label>
+    <rdfs:comment xml:lang="en">Which parts of the plant are edible.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#ediblePartOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasMinimumRootDepthCm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has minimum root depth (cm)</rdfs:label>
+    <rdfs:comment xml:lang="en">Minimum root depth in centimetres.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b27"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#belongsToGenus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">belongs to genus</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant to its taxonomic genus.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasGenusMember"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#inRegion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">in region</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a PlantDistribution node to its geographic Region.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#regionOfDistribution"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Flower">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Flower</rdfs:label>
+    <rdfs:comment xml:lang="en">Flower of a plant.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#TuberPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Tubers</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasAtmosphericHumidity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has atmospheric humidity</rdfs:label>
+    <rdfs:comment xml:lang="en">Atmospheric humidity requirement (0–10).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasFlowerConspicuous">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has conspicuous flower</rdfs:label>
+    <rdfs:comment xml:lang="en">Whether the flower is conspicuous.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Flower"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#VegetableUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Vegetable Use</rdfs:label>
+    <rdfs:comment xml:lang="en">Plant classified as a vegetable.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantUse"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b26">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b25"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#September">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">September</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Autumn"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b14">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b17"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Autumn">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Autumn</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b33">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b31"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b34"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageColor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Foliage Color</rdfs:label>
+    <rdfs:comment xml:lang="en">Color of foliage (e.g. Green, Grey).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Yellow">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Yellow</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasBibliography">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has bibliography</rdfs:label>
+    <rdfs:comment xml:lang="en">Bibliographic reference for the taxon.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#August">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">August</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Summer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b37">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.0</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b109">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#hasTrefleId"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b96">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#April"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b97"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Red">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Red</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Bunch">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Bunch</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#CareLevel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Care Level</rdfs:label>
+    <rdfs:comment xml:lang="en">Difficulty of plant care as assessed by the shop.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b69"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasYear">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has year</rdfs:label>
+    <rdfs:comment xml:lang="en">Year of taxonomic publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Stoloniferous">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Stoloniferous</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Month">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Month</rdfs:label>
+    <rdfs:comment xml:lang="en">Calendar month.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b93"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_White">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">White</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGroundHumidity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has ground humidity</rdfs:label>
+    <rdfs:comment xml:lang="en">Ground humidity requirement (0–10).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b14"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b51">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b50"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b70">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#MediumCare"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b71"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b98">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#June"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b99"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#HumidityCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Humidity Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Humidity conditions.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGrowthRate">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has growth rate</rdfs:label>
+    <rdfs:comment xml:lang="en">Rate of growth.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthRate"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#growthRateOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#SingleCrown">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Single Crown</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasTrefleId">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:label xml:lang="en">has Trefle ID</rdfs:label>
+    <rdfs:comment xml:lang="en">Unique numeric identifier from the Trefle database.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b13">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b12"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#growthHabitOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">growth habit of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b102">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#October"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b103"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isPartOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">is part of</rdfs:label>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasSoilNutriments">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has soil nutriments</rdfs:label>
+    <rdfs:comment xml:lang="en">Soil nutriment requirement (0–10).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b52"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b122">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Root"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b20">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b93">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#January"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b94"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ediblePartOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">edible part of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#DistributionStatus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Distribution Status</rdfs:label>
+    <rdfs:comment xml:lang="en">Status of a plant's presence in a region.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasAuthor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has author</rdfs:label>
+    <rdfs:comment xml:lang="en">Author of the taxonomic description.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleTubersUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Tubers</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b105">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#hasDistribution"/>
+    <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Region">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Region</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract geographic region. Subclassed into Continent and Country.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#May">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">May</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Spring"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b116">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#VegetableUse"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b117"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b92">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:allValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#hasColor"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b19">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b22"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Root">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Root</rdfs:label>
+    <rdfs:comment xml:lang="en">Root system of a plant.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#July">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">July</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Summer"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b18">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b16"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#TaxonomicRank">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Taxonomic Rank</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract superclass for taxonomic classification units.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasShopProduct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has shop product</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant species to a shop product.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isShopProductFor"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#CoarseTexture">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageTexture"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Coarse</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#VegetableUseIndividual">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#VegetableUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Vegetable</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Foliage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Foliage</rdfs:label>
+    <rdfs:comment xml:lang="en">Leaves or visible foliage of a plant.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#CoolCategory">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#TemperatureCategory"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Cool</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#AnaerobicCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Anaerobic Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Anaerobic tolerance level.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <rdfs:label xml:lang="en">Plant Management System Ontology</rdfs:label>
+    <rdfs:comment xml:lang="en">OWL2 schema for the Plant Management System.</rdfs:comment>
+    <owl:versionInfo>1.0.0</owl:versionInfo>
+    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b80">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#CoolCategory"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b81"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#SlowGrowthRate">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthRate"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Slow</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ShopProduct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Shop Product</rdfs:label>
+    <rdfs:comment xml:lang="en">An item in the shop inventory.</rdfs:comment>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b90"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:hasKey rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b91"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b87">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#ForbHerb"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b88"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasFamilyMember">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">has family member</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#SoilCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Soil Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Soil-related conditions: nutriments, salinity, pH range.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Family">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Family</rdfs:label>
+    <rdfs:comment xml:lang="en">Taxonomic family.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#TaxonomicRank"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#PlantDistribution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Plant Distribution</rdfs:label>
+    <rdfs:comment xml:lang="en">Distribution record for a plant in a region.</rdfs:comment>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b82"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b34">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b32"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b1">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#growsInMonth">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">grows in month</rdfs:label>
+    <rdfs:comment xml:lang="en">Month of active growth.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isGrowthMonthOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#careLevelOfProduct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#CareLevel"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:label xml:lang="en">care level of product</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleFlowersUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Flowers</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGrowthForm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has growth form</rdfs:label>
+    <rdfs:comment xml:lang="en">Specific growth form.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#growthFormOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasAverageHeightCm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has average height (cm)</rdfs:label>
+    <rdfs:comment xml:lang="en">Average height in centimetres.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b11"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Yellow">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Yellow</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b112">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b113"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Winter">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Winter</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b30">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b33"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isSubsumedByFamily">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">is subsumed by family</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a genus to its parent family.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasGenus"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#December">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">December</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Winter"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageColor_Grey">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Grey</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Tree">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Tree</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGenus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+    <rdfs:label xml:lang="en">has genus</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#inSeason">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdfs:label xml:lang="en">in season</rdfs:label>
+    <rdfs:comment xml:lang="en">Connects a month to the season it belongs to.</rdfs:comment>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasMonth"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isComponentOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">is component of</rdfs:label>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b11">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b13"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b61">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b59"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b24">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b26"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPlantingSpreadCm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has planting spread (cm)</rdfs:label>
+    <rdfs:comment xml:lang="en">Spread of the plant at maturity.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b46"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Red">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Red</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#LightCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Light Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Light requirement (0–10 scale).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b43">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b45"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b66">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#isSubsumedByFamily"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasScientificName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:label xml:lang="en">has scientific name</rdfs:label>
+    <rdfs:comment xml:lang="en">Scientific name of the species.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGenusMember">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">has genus member</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Summer">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Summer</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Purple">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Purple</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Black">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Black</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#SingleStem">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Single Stem</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b57">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b60"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasSynonymName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has synonym name</rdfs:label>
+    <rdfs:comment xml:lang="en">Taxonomic synonym.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b88">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Graminoid"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b89"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#belongsToFamily">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">belongs to family</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant to its taxonomic family.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <owl:propertyChainAxiom rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b65"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasFamilyMember"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasDistribution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has distribution</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant to a distribution record.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#distributionForPlant"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#colorOfPart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <rdfs:label xml:lang="en">color of part</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Blue">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Blue</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b101">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#September"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b102"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_White">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">White</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Vine">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Vine</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ModerateCategory">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#TemperatureCategory"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Moderate</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#bloomsInMonth">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">blooms in month</rdfs:label>
+    <rdfs:comment xml:lang="en">Month when the plant blooms.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isBloomMonthOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b90">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#isShopProductFor"/>
+    <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#TemperatureCategory">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Temperature Category</rdfs:label>
+    <rdfs:comment xml:lang="en">Preferred temperature range for a shop product.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:disjointUnionOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b79"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Colonizing">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Colonizing</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#April">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">April</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Spring"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b23">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b21"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasMonth">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdfs:label xml:lang="en">has month</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#growthFormOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">growth form of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b35">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b38"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleFruitsUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Fruits</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#foliageTextureOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageTexture"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Foliage"/>
+    <rdfs:label xml:lang="en">foliage texture of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b73">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#ModerateGrowthRate"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b74"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasLightRequirement">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has light requirement</rdfs:label>
+    <rdfs:comment xml:lang="en">Light requirement on a 0–10 scale.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b19"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#March">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">March</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Spring"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#AbsentStatus">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Absent</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b39">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b37"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleRootsUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Roots</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#conditionRequiredBy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#HabitatCondition"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">condition required by</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b78">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Winter"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#NativeStatus">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Native</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Rhizomatous">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Rhizomatous</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b65">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#belongsToGenus"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b66"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Fruits</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Green">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Green</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasComponent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has component</rdfs:label>
+    <rdfs:comment xml:lang="en">Direct structural component of a plant.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantPart"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/plantms/ontology#hasPart"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#isComponentOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#StemPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Stem</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Brown">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Brown</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Purple">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Purple</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Spring">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Season"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Spring</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b47">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Flower Color</rdfs:label>
+    <rdfs:comment xml:lang="en">Color of a flower.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b95">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#March"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b96"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#distributionForPlant">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">distribution for plant</rdfs:label>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerColor_Black">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FlowerColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Black</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#November">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">November</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Autumn"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Fruit Color</rdfs:label>
+    <rdfs:comment xml:lang="en">Color of fruit (e.g. Black, Red).</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#Color"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b91">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#hasProductId"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b4">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b2"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#temperatureCategoryOfProduct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#TemperatureCategory"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:label xml:lang="en">temperature category of product</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#PlantPart">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Plant Part</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract superclass for structural plant components.</rdfs:comment>
+    <rdfs:subClassOf rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b92"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Blue">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Blue</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#isEdible">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">is edible</rdfs:label>
+    <rdfs:comment xml:lang="en">True if the plant is edible.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FlowerPart">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdiblePart"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Flowers</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b38">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b36"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b39"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b6">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b76">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Summer"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b77"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageColor_Green">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Green</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b106">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#belongsToFamily"/>
+    <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b2">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleStemsUse">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#EdibleUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Edible Stems</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b79">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#WarmCategory"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b80"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#plantUseOf">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantUse"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:label xml:lang="en">plant use of</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#January">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">January</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Winter"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#June">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">June</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Summer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPriceEur">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has price (EUR)</rdfs:label>
+    <rdfs:comment xml:lang="en">Retail price in Euros.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b49"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b49">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b51"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasGrowthHabit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has growth habit</rdfs:label>
+    <rdfs:comment xml:lang="en">Growth habit of a plant.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#growthHabitOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b68">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#hasPart"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPhMaximum">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has pH maximum</rdfs:label>
+    <rdfs:comment xml:lang="en">Maximum soil pH.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b30"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b107">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#belongsToGenus"/>
+    <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#Genus"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasFamilyCommonName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has family common name</rdfs:label>
+    <rdfs:comment xml:lang="en">Common-language name of the taxonomic family.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b77">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Autumn"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b78"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b50">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b46">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b48"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b28">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b45">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b44"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#MultipleStem">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthForm"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Multiple Stem</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b40">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b42"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b81">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#ModerateCategory"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b113">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasProductName">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:label xml:lang="en">has product name</rdfs:label>
+    <rdfs:comment xml:lang="en">Commercial name used in the shop (e.g. 'Monstera', 'Peace Lily').</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#ShopProduct"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EndemicStatus">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Endemic</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b9">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b7"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b10"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ForbHerb">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Forb/herb</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#ModerateGrowthRate">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthRate"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Moderate</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b86">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Subshrub"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b87"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPhMinimum">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">has pH minimum</rdfs:label>
+    <rdfs:comment xml:lang="en">Minimum soil pH.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b35"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b62">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b64"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b114">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+    <owl:members rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b115"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b21">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b82">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:allValuesFrom rdf:resource="http://www.semanticweb.org/plantms/ontology#Region"/>
+    <owl:onProperty rdf:resource="http://www.semanticweb.org/plantms/ontology#inRegion"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b8">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasPlantUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has plant use</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a plant to a plant use.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Plant"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantUse"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#plantUseOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b10">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b8"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b15">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b59">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasFoliageTexture">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has foliage texture</rdfs:label>
+    <rdfs:comment xml:lang="en">Texture of foliage.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#Foliage"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageTexture"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#foliageTextureOf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageColor_Yellow">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Yellow</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b89">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Nonvascular"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b29">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b28"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b67">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#hasComponent"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b68"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b55">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b53"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b56"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b12">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b83">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Tree"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b84"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#HabitatCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Habitat Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Abstract superclass for environmental/ecological condition types.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#HardCare">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#CareLevel"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Hard</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b85">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Vine"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b86"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b71">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#HardCare"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b48">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b47"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b110">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+    <owl:members rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b111"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b44">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#hasDistributionStatus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has distribution status</rdfs:label>
+    <rdfs:comment xml:lang="en">Status of the distribution (Native, Introduced, Endemic, Absent).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantDistribution"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/plantms/ontology#DistributionStatus"/>
+    <owl:inverseOf rdf:resource="http://www.semanticweb.org/plantms/ontology#statusOfDistribution"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FruitColor_Orange">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FruitColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Orange</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b97">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#May"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b98"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b119">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Flower"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b120"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b27">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <owl:withRestrictions rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b29"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Nonvascular">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Nonvascular</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#October">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#Month"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">October</rdfs:label>
+    <plant:inSeason rdf:resource="http://www.semanticweb.org/plantms/ontology#Autumn"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b31">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b111">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Family"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b112"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b58">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EdibleUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Edible Use</rdfs:label>
+    <rdfs:comment xml:lang="en">Plant used as a food source.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/plantms/ontology#PlantUse"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b7">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b84">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Shrub"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b85"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b120">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#Foliage"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b121"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b94">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#February"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b95"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b118">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+    <owl:members rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b119"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b22">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b20"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b23"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#FoliageColor_Red">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#FoliageColor"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Red</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b5">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b3"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b104">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#December"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#EasyCare">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#CareLevel"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Easy</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b3">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b53">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#OrnamentalUseIndividual">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#OrnamentalUse"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Ornamental</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b63">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b32">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">14.0</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b17">
+    <rdf:first rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b15"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b18"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b16">
+    <xsd:maxInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</xsd:maxInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b69">
+    <rdf:first rdf:resource="http://www.semanticweb.org/plantms/ontology#EasyCare"/>
+    <rdf:rest rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b70"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/plantms/ontology#Shrub">
+    <rdf:type rdf:resource="http://www.semanticweb.org/plantms/ontology#GrowthHabit"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdfs:label xml:lang="en">Shrub</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b36">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="n083dc2c1c3f54c9f88b98b5d38be9802b25">
+    <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</xsd:minInclusive>
+  </rdf:Description>
+</rdf:RDF>

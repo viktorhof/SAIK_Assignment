@@ -4,9 +4,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix plant: <http://www.semanticweb.org/plantms/ontology#> .
 
-# R2RML mapping for the normalized SQLite database created by scripts/load_database.py.
-# The schema materializes multi-valued CSV fields into link tables so the mappings
-# only need direct table scans or simple lookup joins.
+# R2RML mapping for the normalized SQLite database.
 
 <#PlantTriplesMap>
   rr:logicalTable [ rr:tableName "plant" ];

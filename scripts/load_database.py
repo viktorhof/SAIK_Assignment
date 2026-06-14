@@ -1,12 +1,8 @@
 """
-Load both data sources into a normalized SQLite schema for Step 2 OBDA.
+Load species and shop data into SQLite.
 
-Creates : data/plantms.db
-Tables  : plant core data, taxonomy dimensions, lookup dimensions,
-          multi-value link tables, and shop inventory tables
-
-Run with: .venv\\Scripts\\python.exe scripts\\load_database.py
-Requires: only Python stdlib (csv, sqlite3, pathlib, time, re)
+LLM use disclaimer: an LLM was used during this exercise; the output was
+reviewed, adapted, and verified by the author.
 """
 
 import csv
@@ -83,7 +79,7 @@ def split_month_values(value):
     months = []
     for part in text.replace(",", " ").split():
         part = part.strip().lower()
-        # Try numeric first, then abbreviation
+        # The source has both numeric months and abbreviations.
         month_number = to_int(part)
         if month_number is None:
             month_number = _MONTH_ABBR.get(part[:3])

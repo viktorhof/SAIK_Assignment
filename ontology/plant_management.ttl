@@ -1,4 +1,3 @@
-@prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix plant: <http://www.semanticweb.org/plantms/ontology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -7,7 +6,6 @@
 
 plant: a owl:Ontology ;
     rdfs:label "Plant Management System Ontology"@en ;
-    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     rdfs:comment "OWL2 schema for the Plant Management System."@en ;
     owl:versionInfo "1.0.0" .
 
@@ -249,6 +247,11 @@ plant:ThicketForming a plant:GrowthForm,
         owl:NamedIndividual ;
     rdfs:label "Thicket Forming"@en .
 
+plant:TimeInterval a owl:Class ;
+    rdfs:label "Time Interval"@en ;
+    rdfs:comment "An interval defined by a start and end month."@en ;
+    rdfs:subClassOf owl:Thing .
+
 plant:TuberPart a plant:EdiblePart,
         owl:NamedIndividual ;
     rdfs:label "Tubers"@en .
@@ -261,22 +264,19 @@ plant:bloomsInMonth a owl:ObjectProperty ;
     rdfs:label "blooms in month"@en ;
     rdfs:comment "Month when the plant blooms."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:Month ;
-    owl:inverseOf plant:isBloomMonthOf .
+    rdfs:range plant:Month .
 
 plant:fruitingInMonth a owl:ObjectProperty ;
     rdfs:label "fruiting in month"@en ;
     rdfs:comment "Month when the plant fruits."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:Month ;
-    owl:inverseOf plant:isFruitingMonthOf .
+    rdfs:range plant:Month .
 
 plant:growsInMonth a owl:ObjectProperty ;
     rdfs:label "grows in month"@en ;
     rdfs:comment "Month of active growth."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:Month ;
-    owl:inverseOf plant:isGrowthMonthOf .
+    rdfs:range plant:Month .
 
 plant:hasAnaerobicTolerance a owl:DatatypeProperty ;
     rdfs:label "has anaerobic tolerance"@en ;
@@ -284,7 +284,8 @@ plant:hasAnaerobicTolerance a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasAtmosphericHumidity a owl:DatatypeProperty ;
     rdfs:label "has atmospheric humidity"@en ;
@@ -292,7 +293,8 @@ plant:hasAtmosphericHumidity a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasAuthor a owl:DatatypeProperty ;
     rdfs:label "has author"@en ;
@@ -306,7 +308,8 @@ plant:hasAverageHeightCm a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasBibliography a owl:DatatypeProperty ;
     rdfs:label "has bibliography"@en ;
@@ -319,8 +322,7 @@ plant:hasCareLevel a owl:FunctionalProperty,
     rdfs:label "has care level"@en ;
     rdfs:comment "Care difficulty of this shop product (Easy/Medium/Hard)."@en ;
     rdfs:domain plant:ShopProduct ;
-    rdfs:range plant:CareLevel ;
-    owl:inverseOf plant:careLevelOfProduct .
+    rdfs:range plant:CareLevel .
 
 plant:hasCommonName a owl:DatatypeProperty ;
     rdfs:label "has common name"@en ;
@@ -332,15 +334,13 @@ plant:hasDistributionStatus a owl:ObjectProperty ;
     rdfs:label "has distribution status"@en ;
     rdfs:comment "Status of the distribution (Native, Introduced, Endemic, Absent)."@en ;
     rdfs:domain plant:PlantDistribution ;
-    rdfs:range plant:DistributionStatus ;
-    owl:inverseOf plant:statusOfDistribution .
+    rdfs:range plant:DistributionStatus .
 
 plant:hasEdiblePart a owl:ObjectProperty ;
     rdfs:label "has edible part"@en ;
     rdfs:comment "Which parts of the plant are edible."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:EdiblePart ;
-    owl:inverseOf plant:ediblePartOf .
+    rdfs:range plant:EdiblePart .
 
 plant:hasFamilyCommonName a owl:DatatypeProperty ;
     rdfs:label "has family common name"@en ;
@@ -359,8 +359,7 @@ plant:hasFoliageTexture a owl:FunctionalProperty,
     rdfs:label "has foliage texture"@en ;
     rdfs:comment "Texture of foliage."@en ;
     rdfs:domain plant:Foliage ;
-    rdfs:range plant:FoliageTexture ;
-    owl:inverseOf plant:foliageTextureOf .
+    rdfs:range plant:FoliageTexture .
 
 plant:hasFruitConspicuous a owl:DatatypeProperty ;
     rdfs:label "has conspicuous fruit"@en ;
@@ -374,29 +373,27 @@ plant:hasGroundHumidity a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasGrowthForm a owl:ObjectProperty ;
     rdfs:label "has growth form"@en ;
     rdfs:comment "Specific growth form."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:GrowthForm ;
-    owl:inverseOf plant:growthFormOf .
+    rdfs:range plant:GrowthForm .
 
 plant:hasGrowthHabit a owl:ObjectProperty ;
     rdfs:label "has growth habit"@en ;
     rdfs:comment "Growth habit of a plant."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:GrowthHabit ;
-    owl:inverseOf plant:growthHabitOf .
+    rdfs:range plant:GrowthHabit .
 
 plant:hasGrowthRate a owl:FunctionalProperty,
         owl:ObjectProperty ;
     rdfs:label "has growth rate"@en ;
     rdfs:comment "Rate of growth."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:GrowthRate ;
-    owl:inverseOf plant:growthRateOf .
+    rdfs:range plant:GrowthRate .
 
 plant:hasImageUrl a owl:DatatypeProperty ;
     rdfs:label "has image URL"@en ;
@@ -410,7 +407,8 @@ plant:hasLightRequirement a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasMaximumHeightCm a owl:DatatypeProperty ;
     rdfs:label "has maximum height (cm)"@en ;
@@ -418,7 +416,8 @@ plant:hasMaximumHeightCm a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasMinimumRootDepthCm a owl:DatatypeProperty ;
     rdfs:label "has minimum root depth (cm)"@en ;
@@ -426,7 +425,8 @@ plant:hasMinimumRootDepthCm a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasPhMaximum a owl:DatatypeProperty ;
     rdfs:label "has pH maximum"@en ;
@@ -434,7 +434,8 @@ plant:hasPhMaximum a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] [ xsd:maxInclusive 14.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] [ xsd:maxInclusive 14.0 ] ) ],
+        xsd:decimal .
 
 plant:hasPhMinimum a owl:DatatypeProperty ;
     rdfs:label "has pH minimum"@en ;
@@ -442,14 +443,14 @@ plant:hasPhMinimum a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] [ xsd:maxInclusive 14.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] [ xsd:maxInclusive 14.0 ] ) ],
+        xsd:decimal .
 
 plant:hasPlantUse a owl:ObjectProperty ;
     rdfs:label "has plant use"@en ;
     rdfs:comment "Links a plant to a plant use."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:PlantUse ;
-    owl:inverseOf plant:plantUseOf .
+    rdfs:range plant:PlantUse .
 
 plant:hasPlantingDaysToHarvest a owl:DatatypeProperty ;
     rdfs:label "has planting days to harvest"@en ;
@@ -457,7 +458,8 @@ plant:hasPlantingDaysToHarvest a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ],
+        xsd:integer .
 
 plant:hasPlantingRowSpacingCm a owl:DatatypeProperty ;
     rdfs:label "has planting row spacing (cm)"@en ;
@@ -465,7 +467,8 @@ plant:hasPlantingRowSpacingCm a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasPlantingSpreadCm a owl:DatatypeProperty ;
     rdfs:label "has planting spread (cm)"@en ;
@@ -473,7 +476,8 @@ plant:hasPlantingSpreadCm a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasPriceEur a owl:DatatypeProperty ;
     rdfs:label "has price (EUR)"@en ;
@@ -481,7 +485,8 @@ plant:hasPriceEur a owl:DatatypeProperty ;
     rdfs:domain plant:ShopProduct ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:decimal ;
-            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] ) ],
+        xsd:decimal .
 
 plant:hasProductName a owl:DatatypeProperty,
         owl:FunctionalProperty ;
@@ -516,7 +521,8 @@ plant:hasSoilNutriments a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasSoilSalinity a owl:DatatypeProperty ;
     rdfs:label "has soil salinity"@en ;
@@ -524,7 +530,8 @@ plant:hasSoilSalinity a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] [ xsd:maxInclusive 10 ] ) ],
+        xsd:integer .
 
 plant:hasStockQuantity a owl:DatatypeProperty ;
     rdfs:label "has stock quantity"@en ;
@@ -532,7 +539,8 @@ plant:hasStockQuantity a owl:DatatypeProperty ;
     rdfs:domain plant:ShopProduct ;
     rdfs:range [ a rdfs:Datatype ;
             owl:onDatatype xsd:integer ;
-            owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ] .
+            owl:withRestrictions ( [ xsd:minInclusive 0 ] ) ],
+        xsd:integer .
 
 plant:hasSynonymName a owl:DatatypeProperty ;
     rdfs:label "has synonym name"@en ;
@@ -545,8 +553,7 @@ plant:hasTemperatureCategory a owl:FunctionalProperty,
     rdfs:label "has temperature category"@en ;
     rdfs:comment "Preferred temperature range for this product (Warm/Cool/Moderate)."@en ;
     rdfs:domain plant:ShopProduct ;
-    rdfs:range plant:TemperatureCategory ;
-    owl:inverseOf plant:temperatureCategoryOfProduct .
+    rdfs:range plant:TemperatureCategory .
 
 plant:hasWikipediaUrl a owl:DatatypeProperty ;
     rdfs:label "has Wikipedia URL"@en ;
@@ -560,13 +567,6 @@ plant:hasYear a owl:DatatypeProperty ;
     rdfs:domain plant:Plant ;
     rdfs:range xsd:integer .
 
-plant:inSeason a owl:ObjectProperty ;
-    rdfs:label "in season"@en ;
-    rdfs:comment "Connects a month to the season it belongs to."@en ;
-    rdfs:domain plant:Month ;
-    rdfs:range plant:Season ;
-    owl:inverseOf plant:hasMonth .
-
 plant:isEdible a owl:DatatypeProperty ;
     rdfs:label "is edible"@en ;
     rdfs:comment "True if the plant is edible."@en ;
@@ -578,8 +578,7 @@ plant:isSubRegionOf a owl:ObjectProperty,
     rdfs:label "is sub-region of"@en ;
     rdfs:comment "Transitive region hierarchy: Country isSubRegionOf Continent."@en ;
     rdfs:domain plant:Region ;
-    rdfs:range plant:Region ;
-    owl:inverseOf plant:hasSubRegion .
+    rdfs:range plant:Region .
 
 plant:isVegetable a owl:DatatypeProperty ;
     rdfs:label "is vegetable"@en ;
@@ -591,18 +590,19 @@ plant:requiresCondition a owl:ObjectProperty ;
     rdfs:label "requires condition"@en ;
     rdfs:comment "Links a plant to an ecological condition type."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:HabitatCondition ;
-    owl:inverseOf plant:conditionRequiredBy .
+    rdfs:range plant:HabitatCondition .
 
 plant:April a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "April"@en ;
-    plant:inSeason plant:Spring .
+    rdfs:label "April"@en .
 
 plant:August a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "August"@en ;
-    plant:inSeason plant:Summer .
+    rdfs:label "August"@en .
+
+plant:Autumn a plant:Season,
+        owl:NamedIndividual ;
+    rdfs:label "Autumn"@en .
 
 plant:CoolCategory a plant:TemperatureCategory,
         owl:NamedIndividual ;
@@ -610,8 +610,7 @@ plant:CoolCategory a plant:TemperatureCategory,
 
 plant:December a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "December"@en ;
-    plant:inSeason plant:Winter .
+    rdfs:label "December"@en .
 
 plant:EasyCare a plant:CareLevel,
         owl:NamedIndividual ;
@@ -619,8 +618,7 @@ plant:EasyCare a plant:CareLevel,
 
 plant:February a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "February"@en ;
-    plant:inSeason plant:Winter .
+    rdfs:label "February"@en .
 
 plant:ForbHerb a plant:GrowthHabit,
         owl:NamedIndividual ;
@@ -636,28 +634,23 @@ plant:HardCare a plant:CareLevel,
 
 plant:January a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "January"@en ;
-    plant:inSeason plant:Winter .
+    rdfs:label "January"@en .
 
 plant:July a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "July"@en ;
-    plant:inSeason plant:Summer .
+    rdfs:label "July"@en .
 
 plant:June a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "June"@en ;
-    plant:inSeason plant:Summer .
+    rdfs:label "June"@en .
 
 plant:March a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "March"@en ;
-    plant:inSeason plant:Spring .
+    rdfs:label "March"@en .
 
 plant:May a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "May"@en ;
-    plant:inSeason plant:Spring .
+    rdfs:label "May"@en .
 
 plant:MediumCare a plant:CareLevel,
         owl:NamedIndividual ;
@@ -677,13 +670,11 @@ plant:Nonvascular a plant:GrowthHabit,
 
 plant:November a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "November"@en ;
-    plant:inSeason plant:Autumn .
+    rdfs:label "November"@en .
 
 plant:October a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "October"@en ;
-    plant:inSeason plant:Autumn .
+    rdfs:label "October"@en .
 
 plant:RapidGrowthRate a plant:GrowthRate,
         owl:NamedIndividual ;
@@ -696,8 +687,7 @@ plant:Root a owl:Class ;
 
 plant:September a plant:Month,
         owl:NamedIndividual ;
-    rdfs:label "September"@en ;
-    plant:inSeason plant:Autumn .
+    rdfs:label "September"@en .
 
 plant:Shrub a plant:GrowthHabit,
         owl:NamedIndividual ;
@@ -707,9 +697,17 @@ plant:SlowGrowthRate a plant:GrowthRate,
         owl:NamedIndividual ;
     rdfs:label "Slow"@en .
 
+plant:Spring a plant:Season,
+        owl:NamedIndividual ;
+    rdfs:label "Spring"@en .
+
 plant:Subshrub a plant:GrowthHabit,
         owl:NamedIndividual ;
     rdfs:label "Subshrub"@en .
+
+plant:Summer a plant:Season,
+        owl:NamedIndividual ;
+    rdfs:label "Summer"@en .
 
 plant:Tree a plant:GrowthHabit,
         owl:NamedIndividual ;
@@ -723,66 +721,28 @@ plant:WarmCategory a plant:TemperatureCategory,
         owl:NamedIndividual ;
     rdfs:label "Warm"@en .
 
+plant:Winter a plant:Season,
+        owl:NamedIndividual ;
+    rdfs:label "Winter"@en .
+
 plant:belongsToFamily a owl:FunctionalProperty,
         owl:ObjectProperty ;
     rdfs:label "belongs to family"@en ;
     rdfs:comment "Links a plant to its taxonomic family."@en ;
     rdfs:domain plant:Plant ;
     rdfs:range plant:Family ;
-    owl:inverseOf plant:hasFamilyMember ;
     owl:propertyChainAxiom ( plant:belongsToGenus plant:isSubsumedByFamily ) .
-
-plant:careLevelOfProduct a owl:ObjectProperty ;
-    rdfs:label "care level of product"@en ;
-    rdfs:domain plant:CareLevel ;
-    rdfs:range plant:ShopProduct .
-
-plant:colorOfPart a owl:ObjectProperty ;
-    rdfs:label "color of part"@en ;
-    rdfs:domain plant:Color ;
-    rdfs:range plant:PlantPart .
-
-plant:conditionRequiredBy a owl:ObjectProperty ;
-    rdfs:label "condition required by"@en ;
-    rdfs:domain plant:HabitatCondition ;
-    rdfs:range plant:Plant .
 
 plant:distributionForPlant a owl:ObjectProperty ;
     rdfs:label "distribution for plant"@en ;
     rdfs:domain plant:PlantDistribution ;
     rdfs:range plant:Plant .
 
-plant:ediblePartOf a owl:ObjectProperty ;
-    rdfs:label "edible part of"@en ;
-    rdfs:domain plant:EdiblePart ;
-    rdfs:range plant:Plant .
-
-plant:foliageTextureOf a owl:ObjectProperty ;
-    rdfs:label "foliage texture of"@en ;
-    rdfs:domain plant:FoliageTexture ;
-    rdfs:range plant:Foliage .
-
-plant:growthFormOf a owl:ObjectProperty ;
-    rdfs:label "growth form of"@en ;
-    rdfs:domain plant:GrowthForm ;
-    rdfs:range plant:Plant .
-
-plant:growthHabitOf a owl:ObjectProperty ;
-    rdfs:label "growth habit of"@en ;
-    rdfs:domain plant:GrowthHabit ;
-    rdfs:range plant:Plant .
-
-plant:growthRateOf a owl:ObjectProperty ;
-    rdfs:label "growth rate of"@en ;
-    rdfs:domain plant:GrowthRate ;
-    rdfs:range plant:Plant .
-
 plant:hasColor a owl:ObjectProperty ;
     rdfs:label "has color"@en ;
     rdfs:comment "Links a plant part to a color."@en ;
     rdfs:domain plant:PlantPart ;
-    rdfs:range plant:Color ;
-    owl:inverseOf plant:colorOfPart .
+    rdfs:range plant:Color .
 
 plant:hasDistribution a owl:ObjectProperty ;
     rdfs:label "has distribution"@en ;
@@ -791,38 +751,12 @@ plant:hasDistribution a owl:ObjectProperty ;
     rdfs:range plant:PlantDistribution ;
     owl:inverseOf plant:distributionForPlant .
 
-plant:hasFamilyMember a owl:ObjectProperty ;
-    rdfs:label "has family member"@en ;
-    rdfs:domain plant:Family ;
-    rdfs:range plant:Plant .
-
-plant:hasGenus a owl:ObjectProperty ;
-    rdfs:label "has genus"@en ;
-    rdfs:domain plant:Family ;
-    rdfs:range plant:Genus .
-
-plant:hasGenusMember a owl:ObjectProperty ;
-    rdfs:label "has genus member"@en ;
-    rdfs:domain plant:Genus ;
-    rdfs:range plant:Plant .
-
-plant:hasMonth a owl:ObjectProperty ;
-    rdfs:label "has month"@en ;
-    rdfs:domain plant:Season ;
-    rdfs:range plant:Month .
-
 plant:hasProductId a owl:DatatypeProperty,
         owl:FunctionalProperty ;
     rdfs:label "has product ID"@en ;
     rdfs:comment "Unique shop SKU."@en ;
     rdfs:domain plant:ShopProduct ;
     rdfs:range xsd:integer .
-
-plant:hasSubRegion a owl:ObjectProperty,
-        owl:TransitiveProperty ;
-    rdfs:label "has sub-region"@en ;
-    rdfs:domain plant:Region ;
-    rdfs:range plant:Region .
 
 plant:hasTrefleId a owl:DatatypeProperty,
         owl:FunctionalProperty ;
@@ -835,30 +769,15 @@ plant:inRegion a owl:ObjectProperty ;
     rdfs:label "in region"@en ;
     rdfs:comment "Links a PlantDistribution node to its geographic Region."@en ;
     rdfs:domain plant:PlantDistribution ;
-    rdfs:range plant:Region ;
-    owl:inverseOf plant:regionOfDistribution .
-
-plant:isBloomMonthOf a owl:ObjectProperty ;
-    rdfs:label "is bloom month of"@en ;
-    rdfs:domain plant:Month ;
-    rdfs:range plant:Plant .
+    rdfs:range plant:Region .
 
 plant:isComponentOf a owl:ObjectProperty ;
     rdfs:label "is component of"@en ;
     rdfs:domain plant:PlantPart ;
     rdfs:range plant:Plant .
 
-plant:isFruitingMonthOf a owl:ObjectProperty ;
-    rdfs:label "is fruiting month of"@en ;
-    rdfs:domain plant:Month ;
-    rdfs:range plant:Plant .
-
-plant:isGrowthMonthOf a owl:ObjectProperty ;
-    rdfs:label "is growth month of"@en ;
-    rdfs:domain plant:Month ;
-    rdfs:range plant:Plant .
-
-plant:isPartOf a owl:ObjectProperty ;
+plant:isPartOf a owl:ObjectProperty,
+        owl:TransitiveProperty ;
     rdfs:label "is part of"@en ;
     rdfs:domain plant:PlantPart ;
     rdfs:range plant:Plant .
@@ -868,32 +787,16 @@ plant:isSubsumedByFamily a owl:FunctionalProperty,
     rdfs:label "is subsumed by family"@en ;
     rdfs:comment "Links a genus to its parent family."@en ;
     rdfs:domain plant:Genus ;
-    rdfs:range plant:Family ;
-    owl:inverseOf plant:hasGenus .
-
-plant:plantUseOf a owl:ObjectProperty ;
-    rdfs:label "plant use of"@en ;
-    rdfs:domain plant:PlantUse ;
-    rdfs:range plant:Plant .
-
-plant:regionOfDistribution a owl:ObjectProperty ;
-    rdfs:label "region of distribution"@en ;
-    rdfs:domain plant:Region ;
-    rdfs:range plant:PlantDistribution .
-
-plant:statusOfDistribution a owl:ObjectProperty ;
-    rdfs:label "status of distribution"@en ;
-    rdfs:domain plant:DistributionStatus ;
-    rdfs:range plant:PlantDistribution .
-
-plant:temperatureCategoryOfProduct a owl:ObjectProperty ;
-    rdfs:label "temperature category of product"@en ;
-    rdfs:domain plant:TemperatureCategory ;
-    rdfs:range plant:ShopProduct .
+    rdfs:range plant:Family .
 
 plant:Flower a owl:Class ;
     rdfs:label "Flower"@en ;
     rdfs:comment "Flower of a plant."@en ;
+    rdfs:subClassOf plant:PlantPart .
+
+plant:Foliage a owl:Class ;
+    rdfs:label "Foliage"@en ;
+    rdfs:comment "Leaves or visible foliage of a plant."@en ;
     rdfs:subClassOf plant:PlantPart .
 
 plant:Fruit a owl:Class ;
@@ -921,8 +824,7 @@ plant:belongsToGenus a owl:FunctionalProperty,
     rdfs:label "belongs to genus"@en ;
     rdfs:comment "Links a plant to its taxonomic genus."@en ;
     rdfs:domain plant:Plant ;
-    rdfs:range plant:Genus ;
-    owl:inverseOf plant:hasGenusMember .
+    rdfs:range plant:Genus .
 
 plant:hasComponent a owl:ObjectProperty ;
     rdfs:label "has component"@en ;
@@ -932,12 +834,14 @@ plant:hasComponent a owl:ObjectProperty ;
     rdfs:subPropertyOf plant:hasPart ;
     owl:inverseOf plant:isComponentOf .
 
-plant:hasPart a owl:ObjectProperty ;
+plant:hasPart a owl:ObjectProperty,
+        owl:TransitiveProperty ;
     rdfs:label "has part"@en ;
-    rdfs:comment "Direct relation between a plant and a structural plant part."@en ;
+    rdfs:comment "Part relation between a plant and a plant part."@en ;
     rdfs:domain plant:Plant ;
     rdfs:range plant:PlantPart ;
-    owl:inverseOf plant:isPartOf .
+    owl:inverseOf plant:isPartOf ;
+    owl:propertyChainAxiom ( plant:hasComponent plant:hasPart ) .
 
 plant:isShopProductFor a owl:FunctionalProperty,
         owl:ObjectProperty ;
@@ -946,42 +850,26 @@ plant:isShopProductFor a owl:FunctionalProperty,
     rdfs:domain plant:ShopProduct ;
     rdfs:range plant:Plant .
 
-plant:Foliage a owl:Class ;
-    rdfs:label "Foliage"@en ;
-    rdfs:comment "Leaves or visible foliage of a plant."@en ;
-    rdfs:subClassOf plant:PlantPart .
-
-plant:Autumn a plant:Season,
-        owl:NamedIndividual ;
-    rdfs:label "Autumn"@en .
-
-plant:FoliageColor a owl:Class ;
-    rdfs:label "Foliage Color"@en ;
-    rdfs:comment "Color of foliage (e.g. Green, Grey)."@en ;
-    rdfs:subClassOf plant:Color .
-
-plant:Spring a plant:Season,
-        owl:NamedIndividual ;
-    rdfs:label "Spring"@en .
-
-plant:Summer a plant:Season,
-        owl:NamedIndividual ;
-    rdfs:label "Summer"@en .
-
-plant:Winter a plant:Season,
-        owl:NamedIndividual ;
-    rdfs:label "Winter"@en .
-
 plant:CareLevel a owl:Class ;
     rdfs:label "Care Level"@en ;
     rdfs:comment "Difficulty of plant care as assessed by the shop."@en ;
     rdfs:subClassOf owl:Thing ;
     owl:disjointUnionOf ( plant:EasyCare plant:MediumCare plant:HardCare ) .
 
+plant:FoliageColor a owl:Class ;
+    rdfs:label "Foliage Color"@en ;
+    rdfs:comment "Color of foliage (e.g. Green, Grey)."@en ;
+    rdfs:subClassOf plant:Color .
+
 plant:FoliageTexture a owl:Class ;
     rdfs:label "Foliage Texture"@en ;
     rdfs:comment "Texture of foliage: fine, medium, or coarse."@en ;
     rdfs:subClassOf owl:Thing .
+
+plant:Genus a owl:Class ;
+    rdfs:label "Genus"@en ;
+    rdfs:comment "Taxonomic genus."@en ;
+    rdfs:subClassOf plant:TaxonomicRank .
 
 plant:GrowthRate a owl:Class ;
     rdfs:label "Growth Rate"@en ;
@@ -993,6 +881,12 @@ plant:PlantUse a owl:Class ;
     rdfs:label "Plant Use"@en ;
     rdfs:comment "Abstract superclass for plant use roles."@en ;
     rdfs:subClassOf owl:Thing .
+
+plant:Season a owl:Class ;
+    rdfs:label "Season"@en ;
+    rdfs:comment "Season of the year: Spring, Summer, Autumn, Winter."@en ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointUnionOf ( plant:Spring plant:Summer plant:Autumn plant:Winter ) .
 
 plant:TemperatureCategory a owl:Class ;
     rdfs:label "Temperature Category"@en ;
@@ -1010,26 +904,15 @@ plant:DistributionStatus a owl:Class ;
     rdfs:comment "Status of a plant's presence in a region."@en ;
     rdfs:subClassOf owl:Thing .
 
-plant:Genus a owl:Class ;
-    rdfs:label "Genus"@en ;
-    rdfs:comment "Taxonomic genus."@en ;
+plant:Family a owl:Class ;
+    rdfs:label "Family"@en ;
+    rdfs:comment "Taxonomic family."@en ;
     rdfs:subClassOf plant:TaxonomicRank .
 
 plant:HabitatCondition a owl:Class ;
     rdfs:label "Habitat Condition"@en ;
     rdfs:comment "Abstract superclass for environmental/ecological condition types."@en ;
     rdfs:subClassOf owl:Thing .
-
-plant:Season a owl:Class ;
-    rdfs:label "Season"@en ;
-    rdfs:comment "Season of the year: Spring, Summer, Autumn, Winter."@en ;
-    rdfs:subClassOf owl:Thing ;
-    owl:disjointUnionOf ( plant:Spring plant:Summer plant:Autumn plant:Winter ) .
-
-plant:Family a owl:Class ;
-    rdfs:label "Family"@en ;
-    rdfs:comment "Taxonomic family."@en ;
-    rdfs:subClassOf plant:TaxonomicRank .
 
 plant:PlantDistribution a owl:Class ;
     rdfs:label "Plant Distribution"@en ;
@@ -1039,15 +922,26 @@ plant:PlantDistribution a owl:Class ;
             owl:onProperty plant:inRegion ],
         owl:Thing .
 
-plant:EdibleUse a owl:Class ;
-    rdfs:label "Edible Use"@en ;
-    rdfs:comment "Plant used as a food source."@en ;
-    rdfs:subClassOf plant:PlantUse .
+plant:Region a owl:Class ;
+    rdfs:label "Region"@en ;
+    rdfs:comment "Abstract geographic region. Subclassed into Continent and Country."@en ;
+    rdfs:subClassOf owl:Thing .
 
 plant:EdiblePart a owl:Class ;
     rdfs:label "Edible Part"@en ;
     rdfs:comment "The part of a plant that is edible."@en ;
     rdfs:subClassOf owl:Thing .
+
+plant:EdibleUse a owl:Class ;
+    rdfs:label "Edible Use"@en ;
+    rdfs:comment "Plant used as a food source."@en ;
+    rdfs:subClassOf plant:PlantUse .
+
+plant:GrowthHabit a owl:Class ;
+    rdfs:label "Growth Habit"@en ;
+    rdfs:comment "Overall growth habit of a plant."@en ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointUnionOf ( plant:Tree plant:Shrub plant:Vine plant:Subshrub plant:ForbHerb plant:Graminoid plant:Nonvascular ) .
 
 plant:FlowerColor a owl:Class ;
     rdfs:label "Flower Color"@en ;
@@ -1059,16 +953,14 @@ plant:FruitColor a owl:Class ;
     rdfs:comment "Color of fruit (e.g. Black, Red)."@en ;
     rdfs:subClassOf plant:Color .
 
-plant:GrowthHabit a owl:Class ;
-    rdfs:label "Growth Habit"@en ;
-    rdfs:comment "Overall growth habit of a plant."@en ;
-    rdfs:subClassOf owl:Thing ;
-    owl:disjointUnionOf ( plant:Tree plant:Shrub plant:Vine plant:Subshrub plant:ForbHerb plant:Graminoid plant:Nonvascular ) .
-
-plant:Region a owl:Class ;
-    rdfs:label "Region"@en ;
-    rdfs:comment "Abstract geographic region. Subclassed into Continent and Country."@en ;
-    rdfs:subClassOf owl:Thing .
+plant:ShopProduct a owl:Class ;
+    rdfs:label "Shop Product"@en ;
+    rdfs:comment "An item in the shop inventory."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty plant:isShopProductFor ;
+            owl:someValuesFrom plant:Plant ],
+        owl:Thing ;
+    owl:hasKey ( plant:hasProductId ) .
 
 plant:GrowthForm a owl:Class ;
     rdfs:label "Growth Form"@en ;
@@ -1082,15 +974,6 @@ plant:PlantPart a owl:Class ;
             owl:allValuesFrom plant:Color ;
             owl:onProperty plant:hasColor ],
         owl:Thing .
-
-plant:ShopProduct a owl:Class ;
-    rdfs:label "Shop Product"@en ;
-    rdfs:comment "An item in the shop inventory."@en ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:onProperty plant:isShopProductFor ;
-            owl:someValuesFrom plant:Plant ],
-        owl:Thing ;
-    owl:hasKey ( plant:hasProductId ) .
 
 plant:Month a owl:Class ;
     rdfs:label "Month"@en ;
@@ -1125,6 +1008,3 @@ plant:Plant a owl:Class ;
 
 [] a owl:AllDisjointClasses ;
     owl:members ( plant:Flower plant:Foliage plant:Fruit plant:Root ) .
-
-[] rdf:first plant:hasComponent ;
-    rdf:rest ( plant:hasPart ) .

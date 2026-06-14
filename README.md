@@ -138,9 +138,30 @@ Open [http://localhost:7200](http://localhost:7200). The Compose service runs
 Do this once. Skip if repository `plantms` already exists with data.
 
 1. Open `Setup → Repositories` → create a repository named **`plantms`** with default settings.
+   For GraphDB 10.8, the default inference ruleset is **RDFS-Plus (optimized)**
+   (`rdfsplus-optimized`). This is the setting used for the statement counts below.
 2. Open `Import → Server files` → select `plantms_full_kg.ttl` → import.
 3. Open `Import → User data` → upload `ontology/plant_management_oops_fixed.ttl` → import.
 4. Wait for both imports to finish (the KG import takes ~10 minutes).
+
+Inference in GraphDB is configured on the repository through the **Ruleset**
+setting. The main built-in choices are:
+
+| Ruleset | Meaning |
+|---|---|
+| `empty` | No inference; GraphDB behaves as a plain RDF store. |
+| `rdfs` / `rdfs-optimized` | RDFS reasoning such as `rdfs:subClassOf`, `rdf:type`, and `rdfs:subPropertyOf`. |
+| `rdfsplus` / `rdfsplus-optimized` | RDFS plus selected OWL features such as symmetric, inverse, and transitive properties. This is the default used here. |
+| `owl-horst` / `owl-horst-optimized` | OWL-Horst-style rule reasoning. |
+| `owl-max` / `owl-max-optimized` | Broader OWL Lite/DLP-style rule coverage, including more OWL constructs. |
+| `owl2-ql` | OWL 2 QL profile reasoning. |
+| `owl2-rl` / `owl2-rl-optimized` | OWL 2 RL profile reasoning, suitable for rule-based materialisation. |
+| custom `.pie` file | Project-specific axioms, consistency checks, and entailment rules. |
+
+Related repository options are **Disable owl:sameAs**, which controls GraphDB's
+`owl:sameAs` optimization independently from the selected ruleset, and
+**Enable consistency checks**, which applies consistency rules at transaction
+commit time. Both were left at default settings for this project.
 
 Verify the import in `SPARQL`:
 

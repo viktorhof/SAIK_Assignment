@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
-"""
-Step 5 query interface for the Plant Management knowledge graph.
-
-The default route follows the lecture's SPARQL-generation approach: retrieve
-relevant ontology terms and KG entities, ask an LLM to construct a read-only
-SPARQL query, execute it against GraphDB, and generate an answer grounded in the
-returned rows. There is no vector index or embedding search.
-
-"""
+"""Query interface for the Plant Management knowledge graph."""
 
 import argparse
 import datetime
